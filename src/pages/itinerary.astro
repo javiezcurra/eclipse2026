@@ -14,7 +14,6 @@ function dateShortLabel(d: string): string {
   return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
-// Group events by date for rendering
 const eventsByDate = new Map<string, typeof events>();
 for (const e of events) {
   const list = eventsByDate.get(e.date) ?? [];
@@ -25,15 +24,15 @@ for (const e of events) {
 
 <Base title="Itinerary">
   <header class="mb-6">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">Itinerary</h1>
-    <p class="mt-1 text-sm text-slate-400">Filter by family, or jump to a specific day.</p>
+    <h1 class="text-2xl font-bold tracking-tight text-fg-strong sm:text-3xl">Itinerary</h1>
+    <p class="mt-1 text-sm text-fg-muted">Filter by family, or jump to a specific day.</p>
   </header>
 
   <!-- Family filters -->
-  <section class="mb-4 rounded-xl border border-night-800 bg-night-900/60 p-3">
-    <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Filter by family</p>
+  <section class="mb-4 rounded-xl border border-line bg-card p-3">
+    <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-fg-muted">Filter by family</p>
     <div id="family-filter" class="flex flex-wrap gap-2" data-active="all">
-      <button type="button" data-family="all" class="filter-chip filter-chip-active rounded-full border border-slate-500 bg-slate-700/60 px-3 py-1 text-xs font-medium text-slate-100">All</button>
+      <button type="button" data-family="all" class="filter-chip filter-chip-active rounded-full border border-line-strong bg-card-2 px-3 py-1 text-xs font-medium text-fg-strong">All</button>
       {families.map((f) => {
         const c = familyColorClasses[f.color];
         return (
@@ -48,14 +47,14 @@ for (const e of events) {
         );
       })}
     </div>
-    <p class="mt-2 text-[11px] text-slate-500">Showing events for the selected family plus all "everyone" events.</p>
+    <p class="mt-2 text-[11px] text-fg-subtle">Showing events for the selected family plus all "everyone" events.</p>
   </section>
 
   <!-- Jump-to-date pills -->
   <section class="mb-6 -mx-1 overflow-x-auto">
     <div class="flex gap-2 px-1 pb-2">
       {dates.map((d) => (
-        <a href={`#day-${d}`} class="shrink-0 rounded-full border border-night-700 bg-night-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-slate-400 hover:text-slate-100">
+        <a href={`#day-${d}`} class="shrink-0 rounded-full border border-line bg-card px-3 py-1.5 text-xs font-medium text-fg-muted hover:border-line-strong hover:text-fg-strong">
           {dateShortLabel(d)}
         </a>
       ))}
@@ -66,9 +65,9 @@ for (const e of events) {
   <div class="space-y-8">
     {dates.map((d) => (
       <section id={`day-${d}`} class="scroll-mt-20 day-section" data-date={d}>
-        <header class="mb-4 flex items-baseline justify-between border-b border-night-800 pb-2">
-          <h2 class="text-lg font-semibold text-slate-100">{dateLabel(d)}</h2>
-          <span class="text-xs text-slate-500">{d}</span>
+        <header class="mb-4 flex items-baseline justify-between border-b border-line pb-2">
+          <h2 class="text-lg font-semibold text-fg-strong">{dateLabel(d)}</h2>
+          <span class="text-xs text-fg-subtle">{d}</span>
         </header>
         <div class="space-y-0">
           {eventsByDate.get(d)?.map((e) => <TimelineItem event={e} />)}
@@ -77,7 +76,7 @@ for (const e of events) {
     ))}
   </div>
 
-  <p id="empty-state" class="hidden rounded-xl border border-dashed border-night-700 p-6 text-center text-sm text-slate-400">
+  <p id="empty-state" class="hidden rounded-xl border border-dashed border-line-strong p-6 text-center text-sm text-fg-muted">
     No events match this filter.
   </p>
 </Base>
@@ -98,7 +97,6 @@ for (const e of events) {
       el.classList.toggle('hidden', !show);
       if (show) visibleCount++;
     }
-    // Hide day sections that now have no visible events.
     for (const section of daySections) {
       const anyVisible = section.querySelectorAll('.timeline-item:not(.hidden)').length > 0;
       section.classList.toggle('hidden', !anyVisible);
@@ -117,8 +115,6 @@ for (const e of events) {
       applyFilter(family);
     });
   }
-
-  // Default: All selected, no filter applied.
 </script>
 
 <style>

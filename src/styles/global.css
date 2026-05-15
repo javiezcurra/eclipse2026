@@ -1,25 +1,64 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: applied when `.dark` is on a parent (we put it on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-night-950: #0b1220;
-  --color-night-900: #111a2e;
-  --color-night-800: #1a2540;
-  --color-night-700: #243254;
+  /* Brand accents — same in both themes. */
   --color-sun-500: #f59e0b;
   --color-sun-400: #fbbf24;
+  --color-sun-300: #fcd34d;
+  --color-sun-200: #fde68a;
   --color-corona-300: #fde68a;
+
+  /* Semantic surface + text tokens. Defaults below are LIGHT mode.
+     The `.dark` block at the end of this file overrides them for dark mode. */
+  --color-page: #f8fafc;          /* page background */
+  --color-card: #ffffff;          /* card / panel background */
+  --color-card-2: #f1f5f9;        /* elevated / nested surface */
+  --color-line: #e2e8f0;          /* default border */
+  --color-line-strong: #cbd5e1;   /* stronger border */
+  --color-fg-strong: #0f172a;     /* headings */
+  --color-fg: #1e293b;            /* body */
+  --color-fg-muted: #475569;      /* secondary text */
+  --color-fg-subtle: #64748b;     /* labels, timestamps */
+
   --font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Dark mode overrides — applied when <html> has class="dark". */
+.dark {
+  --color-page: #0b1220;
+  --color-card: #111a2e;
+  --color-card-2: #1a2540;
+  --color-line: #243254;
+  --color-line-strong: #334155;
+  --color-fg-strong: #f1f5f9;
+  --color-fg: #cbd5e1;
+  --color-fg-muted: #94a3b8;
+  --color-fg-subtle: #64748b;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--color-night-950);
-  color: #e2e8f0;
+  background-color: var(--color-page);
+  color: var(--color-fg);
+  /* Helps native form controls and scrollbars match the theme. */
+  color-scheme: light;
+}
+.dark html,
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   font-family: var(--font-display);
   min-height: 100vh;
+}
+
+/* Smooth theme transition for the main color tokens. */
+html, body, nav, footer, main, section, article, aside, header, div {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
 }
 
 /* Print: make the itinerary printable as a fallback when offline */

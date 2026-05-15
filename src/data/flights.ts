@@ -3,11 +3,11 @@ import type { Flight } from './types';
 // Placeholder flights. Replace with real bookings.
 export const flights: Flight[] = [
   {
-    id: 'flight-ezcurra-outbound',
+    id: 'flight-sorianos-outbound',
     airline: 'Iberia',
     flightNumber: 'IB6250',
-    travelers: ['Add traveler', 'Add traveler'],
-    families: ['ezcurra'],
+    travelers: ['Allison', 'Javi', 'Luna'],
+    families: ['sorianos'],
     departDate: '2026-08-05',
     departTime: '21:55',
     departAirport: 'JFK',
@@ -20,11 +20,11 @@ export const flights: Flight[] = [
     notes: 'Overnight, ~7h flight.',
   },
   {
-    id: 'flight-ezcurra-return',
+    id: 'flight-sorianos-return',
     airline: 'Iberia',
     flightNumber: 'IB6251',
-    travelers: ['Add traveler', 'Add traveler'],
-    families: ['ezcurra'],
+    travelers: ['Allison', 'Javi', 'Luna'],
+    families: ['sorianos'],
     departDate: '2026-08-19',
     departTime: '11:20',
     departAirport: 'BCN',
