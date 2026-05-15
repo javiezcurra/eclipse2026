@@ -29,8 +29,30 @@ export default defineConfig({
         ],
       },
       workbox: {
-        navigateFallback: '/eclipse2026/',
-        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
+        // HTML is intentionally NOT in the precache. Workbox precache routes
+        // always win over runtime caching, so to make navigation requests
+        // honor a NetworkFirst strategy (and never serve stale HTML when
+        // online), the HTML files must be excluded from precache.
+        globPatterns: ['**/*.{css,js,svg,png,ico,txt,woff2}'],
+        cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            // Navigation requests: prefer fresh HTML from the network.
+            // Falls back to whatever's in the runtime cache when offline.
+            // Pages the user has visited at least once will be available
+            // offline; pages they haven't visited won't be.
+            urlPattern: ({ request, sameOrigin }) => sameOrigin && request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
+          },
+        ],
       },
     }),
   ],
