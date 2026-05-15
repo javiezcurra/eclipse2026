@@ -24,6 +24,9 @@ const desc = description ?? trip.tagline;
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b1220" />
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    {/* Apple Touch Icon — iOS Safari ignores the web manifest's icon array,
+        so this link is what shows up on the home screen on Apple devices. */}
+    <link rel="apple-touch-icon" sizes="180x180" href={url('apple-touch-icon.png')} />
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
     <meta property="og:title" content={fullTitle} />

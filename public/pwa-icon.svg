@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="corona" cx="50%" cy="50%" r="50%">
+      <stop offset="55%" stop-color="#0b1220" />
+      <stop offset="62%" stop-color="#fde68a" stop-opacity="0.95" />
+      <stop offset="78%" stop-color="#f59e0b" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <!-- Square background, no rounded corners — iOS/Android round it themselves. -->
+  <rect width="512" height="512" fill="#0b1220" />
+  <!-- Eclipse corona ring + moon, sized to fill the icon nicely. -->
+  <circle cx="256" cy="256" r="224" fill="url(#corona)" />
+  <circle cx="256" cy="256" r="112" fill="#0b1220" />
+</svg>
