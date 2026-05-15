@@ -1,58 +1,179 @@
 ---
 import Base from '../layouts/Base.astro';
-import HappeningNow from '../components/HappeningNow.astro';
-import { trip } from '../data/trip';
+import TimelineItem from '../components/TimelineItem.astro';
+import { sortedItinerary, itineraryDates } from '../data/itinerary';
 import { families, familyColorClasses } from '../data/families';
-import { url } from '../lib/url';
+import { flightById } from '../data/flights';
+import { lodgingById } from '../data/lodging';
+import { trip } from '../data/trip';
 
-const eclipseDateLabel = new Date(trip.eclipseDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+const events = sortedItinerary();
+const dates = itineraryDates();
 
-const cards = [
-  { href: 'itinerary', title: 'Itinerary', desc: 'Day-by-day timeline with filters and jump-to-date.', accent: 'from-sun-400 to-sun-500' },
-  { href: 'eclipse', title: 'Eclipse Day', desc: 'Timing, viewing site, safety, and the totality plan.', accent: 'from-corona-300 to-sun-400' },
-  { href: 'prep', title: 'Prep', desc: 'Passports, eclipse glasses, mobile data, adapters.', accent: 'from-sky-400 to-cyan-500' },
-  { href: 'flights-lodging', title: 'Flights & Lodging', desc: 'Quick-reference for every booking.', accent: 'from-emerald-400 to-emerald-500' },
-  { href: 'contacts', title: 'Contacts', desc: 'Embassy, emergency numbers, key phone numbers.', accent: 'from-rose-400 to-rose-500' },
-];
+function dateLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+function dateShortLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+const eventsByDate = new Map<string, typeof events>();
+for (const e of events) {
+  const list = eventsByDate.get(e.date) ?? [];
+  list.push(e);
+  eventsByDate.set(e.date, list);
+}
 ---
 
-<Base title="Home">
-  <header class="mb-8 text-center sm:text-left">
-    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-500 dark:text-sun-400">{eclipseDateLabel}</p>
-    <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">{trip.name}</h1>
-    <p class="mt-2 max-w-2xl text-fg-muted">{trip.tagline}</p>
+<Base>
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tight text-fg-strong sm:text-3xl">Itinerary</h1>
+    <p class="mt-1 text-sm text-fg-muted">{trip.tagline} · Filter by family, or jump to a specific day.</p>
   </header>
 
-  <div class="mb-8">
-    <HappeningNow />
-  </div>
-
-  <section class="mb-10">
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-fg-muted">Travelers</h2>
-    <ul class="flex flex-wrap gap-2">
+  <!-- Family filters -->
+  <section class="mb-4 rounded-xl border border-line bg-card p-3">
+    <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-fg-muted">Filter by family</p>
+    <div id="family-filter" class="flex flex-wrap gap-2" data-active="all">
+      <button type="button" data-family="all" class="filter-chip filter-chip-active rounded-full border border-line-strong bg-card-2 px-3 py-1 text-xs font-medium text-fg-strong">All</button>
       {families.map((f) => {
         const c = familyColorClasses[f.color];
         return (
-          <li class:list={['inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium', c.bgSoft, c.text, c.border]}>
-            <span class:list={['h-2 w-2 rounded-full', c.dot]}></span>
+          <button
+            type="button"
+            data-family={f.id}
+            class:list={['filter-chip rounded-full border px-3 py-1 text-xs font-medium', c.bgSoft, c.text, c.border]}
+          >
+            <span class:list={['mr-1 inline-block h-1.5 w-1.5 rounded-full align-middle', c.dot]}></span>
             {f.name}
-            <span class="text-xs opacity-70">· {f.members.length}</span>
-          </li>
+          </button>
         );
       })}
-    </ul>
+    </div>
+    <p class="mt-2 text-[11px] text-fg-subtle">Showing events for the selected family plus all "everyone" events.</p>
   </section>
 
-  <section>
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-fg-muted">Sections</h2>
-    <div class="grid gap-3 sm:grid-cols-2">
-      {cards.map((card) => (
-        <a href={url(card.href)} class="group rounded-2xl border border-line bg-card p-4 transition-colors hover:border-line-strong hover:bg-card-2">
-          <div class:list={['mb-3 inline-block h-1.5 w-10 rounded-full bg-gradient-to-r', card.accent]}></div>
-          <h3 class="text-base font-semibold text-fg-strong">{card.title}</h3>
-          <p class="mt-1 text-sm text-fg-muted">{card.desc}</p>
+  <!-- Jump-to-date pills -->
+  <section class="mb-6 -mx-1 overflow-x-auto">
+    <div class="flex gap-2 px-1 pb-2">
+      {dates.map((d) => (
+        <a href={`#day-${d}`} class="shrink-0 rounded-full border border-line bg-card px-3 py-1.5 text-xs font-medium text-fg-muted hover:border-line-strong hover:text-fg-strong">
+          {dateShortLabel(d)}
         </a>
       ))}
     </div>
   </section>
+
+  <!-- Timeline -->
+  <div class="space-y-8">
+    {dates.map((d) => (
+      <section id={`day-${d}`} class="scroll-mt-20 day-section" data-date={d}>
+        <header class="mb-4 flex items-baseline justify-between border-b border-line pb-2">
+          <h2 class="text-lg font-semibold text-fg-strong">{dateLabel(d)}</h2>
+          <span class="text-xs text-fg-subtle">{d}</span>
+        </header>
+        <div class="space-y-0">
+          {eventsByDate.get(d)?.map((e) => (
+            <TimelineItem
+              event={e}
+              flight={e.type === 'flight' && e.refId ? flightById(e.refId) : undefined}
+              lodging={(e.type === 'lodging-checkin' || e.type === 'lodging-checkout') && e.refId ? lodgingById(e.refId) : undefined}
+            />
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <p id="empty-state" class="hidden rounded-xl border border-dashed border-line-strong p-6 text-center text-sm text-fg-muted">
+    No events match this filter.
+  </p>
 </Base>
+
+<script>
+  // ── Auto-scroll to today's section on load ──────────────────────────
+  // Before the trip starts (or after it ends), stay at the top.
+  // If the URL already has a hash, respect that and don't override.
+  (function autoscrollToToday() {
+    if (window.location.hash) return;
+
+    const today = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Madrid',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(new Date());
+
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.day-section'));
+    const dates = sections
+      .map((s) => s.dataset.date)
+      .filter((d): d is string => Boolean(d))
+      .sort();
+    if (dates.length === 0) return;
+
+    if (today < dates[0]) return;                 // before trip → stay at top
+    if (today > dates[dates.length - 1]) return;  // after trip  → stay at top
+
+    const target = dates.find((d) => d >= today);
+    if (!target) return;
+
+    const el = document.getElementById(`day-${target}`);
+    el?.scrollIntoView({ behavior: 'instant', block: 'start' });
+  })();
+
+  // ── Family filter chips ────────────────────────────────────────────
+  const container = document.getElementById('family-filter');
+  const chips = container ? Array.from(container.querySelectorAll<HTMLButtonElement>('.filter-chip')) : [];
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.timeline-item'));
+  const daySections = Array.from(document.querySelectorAll<HTMLElement>('.day-section'));
+  const empty = document.getElementById('empty-state');
+
+  function applyFilter(family: string) {
+    let visibleCount = 0;
+    for (const el of items) {
+      const everyone = el.dataset.everyone === 'true';
+      const fams = (el.dataset.families || '').split(',').filter(Boolean);
+      const show = family === 'all' || everyone || fams.includes(family);
+      el.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    }
+    for (const section of daySections) {
+      const anyVisible = section.querySelectorAll('.timeline-item:not(.hidden)').length > 0;
+      section.classList.toggle('hidden', !anyVisible);
+    }
+    empty?.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      const family = chip.dataset.family || 'all';
+      for (const c of chips) {
+        c.classList.remove('filter-chip-active', 'ring-2');
+      }
+      chip.classList.add('filter-chip-active', 'ring-2');
+      container?.setAttribute('data-active', family);
+      applyFilter(family);
+    });
+  }
+
+  // ── Open flight / lodging detail modals ────────────────────────────
+  for (const trigger of document.querySelectorAll<HTMLButtonElement>('[data-modal-target]')) {
+    trigger.addEventListener('click', () => {
+      const id = trigger.dataset.modalTarget;
+      if (!id) return;
+      const dialog = document.getElementById(id) as HTMLDialogElement | null;
+      dialog?.showModal();
+    });
+  }
+
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog.modal')) {
+    dialog.addEventListener('click', (e) => {
+      const rect = dialog.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right
+                  && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (!inside) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .filter-chip-active { box-shadow: 0 0 0 2px rgba(148,163,184,0.4); }
+</style>

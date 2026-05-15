@@ -58,15 +58,19 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
             </div>
             {f.notes && <p class="mt-2 text-xs text-fg-muted">{f.notes}</p>}
             <div class="mt-3 flex flex-wrap items-center gap-3 border-t border-line pt-3 text-xs">
-              <a
-                href={flightTrackingUrl(f.flightNumber)}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center gap-1 font-medium text-sun-700 dark:text-sun-300 hover:underline"
-              >
-                Track on FlightAware
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-              </a>
+              {f.status === 'needs-action' ? (
+                <span class="text-fg-muted italic">Tracking available once booked</span>
+              ) : (
+                <a
+                  href={flightTrackingUrl(f.flightNumber)}
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-1 font-medium text-sun-700 dark:text-sun-300 hover:underline"
+                >
+                  Track on FlightAware
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+              )}
               {f.aircraft && <span class="text-fg-subtle">{f.aircraft}</span>}
               {f.duration && <span class="text-fg-subtle">· {f.duration}</span>}
             </div>

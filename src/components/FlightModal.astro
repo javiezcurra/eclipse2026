@@ -118,15 +118,19 @@ const titleId = `${modalId}-title`;
       >
         Close
       </button>
-      <a
-        href={trackUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-flex items-center justify-center gap-2 rounded-lg bg-sun-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sun-400"
-      >
-        Track on FlightAware
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-      </a>
+      {flight.status === 'needs-action' ? (
+        <span class="rounded-lg border border-dashed border-line-strong px-4 py-2 text-xs text-fg-muted">Tracking available once flight is booked</span>
+      ) : (
+        <a
+          href={trackUrl}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center gap-2 rounded-lg bg-sun-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sun-400"
+        >
+          Track on FlightAware
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      )}
     </footer>
   </form>
 </dialog>
