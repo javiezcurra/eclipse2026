@@ -3,6 +3,20 @@ import type { ItineraryEvent } from './types';
 // `families: []` means everyone; otherwise list the family ids that participate.
 // `refId` on flight/lodging events points to a Flight or Lodging entry for full details.
 export const itinerary: ItineraryEvent[] = [
+  // ─── Dev-Kev · Atlanta → Barcelona ── PLACEHOLDER ───────────────────────
+  {
+    id: 'evt-dev-kev-out',
+    date: '2026-07-30',
+    endDate: '2026-07-31',
+    startTime: 'TBD',
+    type: 'flight',
+    title: 'Dev-Kev: Atlanta → Barcelona',
+    location: 'ATL → BCN · placeholder',
+    families: ['dev-kev'],
+    status: 'needs-action',
+    refId: 'dev-kev-out',
+  },
+
   // ─── Atlanta → Madrid (Sorianos + Hykers) ────────────────────────────────
   {
     id: 'evt-dl108-out',
@@ -40,6 +54,18 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers'],
     status: 'booked',
     refId: 'lodging-madrid-1',
+  },
+
+  // ─── Dev-Kev · Madrid → Barcelona train ── PLACEHOLDER ──────────────────
+  {
+    id: 'evt-train-dev-kev-mad-bcn',
+    date: '2026-08-03',
+    startTime: 'TBD',
+    type: 'transport',
+    title: 'Dev-Kev: Train Madrid → Barcelona',
+    location: 'Madrid → Barcelona · placeholder',
+    families: ['dev-kev'],
+    status: 'needs-action',
   },
 
   // ─── Madrid → Salamanca train ── PLACEHOLDER, not booked yet ────────────
@@ -331,6 +357,19 @@ export const itinerary: ItineraryEvent[] = [
     families: ['vani'],
     status: 'needs-action',
     refId: 'vani-ret',
+  },
+
+  // ─── Dev-Kev · Madrid → Atlanta ── PLACEHOLDER ──────────────────────────
+  {
+    id: 'evt-dev-kev-ret',
+    date: '2026-08-15',
+    startTime: 'TBD',
+    type: 'flight',
+    title: 'Dev-Kev: Madrid → Atlanta',
+    location: 'MAD → ATL · placeholder',
+    families: ['dev-kev'],
+    status: 'needs-action',
+    refId: 'dev-kev-ret',
   },
 
   // ─── Wheelocks · Palma de Mallorca → Frankfurt → Atlanta ─────────────────
