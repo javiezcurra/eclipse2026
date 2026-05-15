@@ -5,6 +5,7 @@ import { lodging } from '../data/lodging';
 import FamilyChips from '../components/FamilyChips.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import { flightTrackingUrl } from '../lib/flight';
+import { listingLabel } from '../lib/url';
 
 function dateLabel(d: string): string {
   return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -22,8 +23,40 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
     <p class="mt-1 text-sm text-fg-muted">Quick reference for every booking.</p>
   </header>
 
-  <section class="mb-10">
-    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-muted">✈️ Flights</h2>
+  <!-- Tabs -->
+  <div class="mb-6 border-b border-line" role="tablist" aria-label="Booking type">
+    <div class="-mb-px flex gap-1">
+      <button
+        type="button"
+        role="tab"
+        id="tab-flights"
+        aria-controls="panel-flights"
+        aria-selected="true"
+        data-tab="flights"
+        class="tab-btn inline-flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium"
+      >
+        <span aria-hidden="true">✈️</span>
+        Flights
+        <span class="rounded-full bg-card-2 px-2 py-0.5 text-[11px] font-medium text-fg-muted">{sortedFlights.length}</span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        id="tab-lodging"
+        aria-controls="panel-lodging"
+        aria-selected="false"
+        data-tab="lodging"
+        class="tab-btn inline-flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium"
+      >
+        <span aria-hidden="true">🏨</span>
+        Lodging
+        <span class="rounded-full bg-card-2 px-2 py-0.5 text-[11px] font-medium text-fg-muted">{sortedLodging.length}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Flights panel -->
+  <section id="panel-flights" role="tabpanel" aria-labelledby="tab-flights" data-panel="flights">
     {sortedFlights.length === 0 ? (
       <p class="text-sm text-fg-muted">No flights added yet.</p>
     ) : (
@@ -57,15 +90,19 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
             </div>
             {f.notes && <p class="mt-2 text-xs text-fg-muted">{f.notes}</p>}
             <div class="mt-3 flex flex-wrap items-center gap-3 border-t border-line pt-3 text-xs">
-              <a
-                href={flightTrackingUrl(f.flightNumber)}
-                target="_blank"
-                rel="noopener"
-                class="inline-flex items-center gap-1 font-medium text-sun-700 dark:text-sun-300 hover:underline"
-              >
-                Track on FlightAware
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-              </a>
+              {f.status === 'needs-action' ? (
+                <span class="text-fg-muted italic">Tracking available once booked</span>
+              ) : (
+                <a
+                  href={flightTrackingUrl(f.flightNumber)}
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-1 font-medium text-sun-700 dark:text-sun-300 hover:underline"
+                >
+                  Track on FlightAware
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                </a>
+              )}
               {f.aircraft && <span class="text-fg-subtle">{f.aircraft}</span>}
               {f.duration && <span class="text-fg-subtle">· {f.duration}</span>}
             </div>
@@ -75,8 +112,8 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
     )}
   </section>
 
-  <section>
-    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-muted">🏨 Lodging</h2>
+  <!-- Lodging panel -->
+  <section id="panel-lodging" role="tabpanel" aria-labelledby="tab-lodging" data-panel="lodging" hidden>
     {sortedLodging.length === 0 ? (
       <p class="text-sm text-fg-muted">No lodging added yet.</p>
     ) : (
@@ -105,7 +142,10 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
               )}
               {l.website && (
                 <p class="mt-1 text-xs">
-                  <a href={l.website} target="_blank" rel="noopener" class="text-sky-700 dark:text-sky-300 underline-offset-2 hover:underline">{l.website.replace(/^https?:\/\//, '')}</a>
+                  <a href={l.website} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-sky-700 dark:text-sky-300 underline-offset-2 hover:underline">
+                    {listingLabel(l.website)}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                  </a>
                 </p>
               )}
               <div class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
@@ -132,3 +172,59 @@ const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.
     )}
   </section>
 </Base>
+
+<script>
+  // Tabs with hash routing: #flights (default) or #lodging.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.tab-btn'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+
+  function activate(name: string, opts: { updateHash?: boolean } = {}) {
+    const target = name === 'lodging' ? 'lodging' : 'flights';
+    for (const tab of tabs) {
+      const active = tab.dataset.tab === target;
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.classList.toggle('tab-btn-active', active);
+    }
+    for (const panel of panels) {
+      const active = panel.dataset.panel === target;
+      panel.toggleAttribute('hidden', !active);
+    }
+    if (opts.updateHash) {
+      const newHash = target === 'flights' ? '' : '#lodging';
+      history.replaceState(null, '', `${location.pathname}${newHash}`);
+    }
+  }
+
+  // Initial activation from hash.
+  activate(location.hash.replace(/^#/, '') || 'flights');
+
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => {
+      activate(tab.dataset.tab || 'flights', { updateHash: true });
+    });
+  }
+
+  // Respond to browser back/forward.
+  window.addEventListener('hashchange', () => {
+    activate(location.hash.replace(/^#/, '') || 'flights');
+  });
+</script>
+
+<style>
+  /* Tab visual states — inactive vs active. */
+  .tab-btn {
+    border-color: transparent;
+    color: var(--color-fg-muted);
+  }
+  .tab-btn:hover {
+    color: var(--color-fg-strong);
+    border-color: var(--color-line);
+  }
+  .tab-btn-active {
+    color: var(--color-fg-strong);
+    border-color: var(--color-sun-500);
+  }
+  .tab-btn-active:hover {
+    border-color: var(--color-sun-500);
+  }
+</style>

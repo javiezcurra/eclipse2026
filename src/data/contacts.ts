@@ -6,7 +6,7 @@ export const contacts: Contact[] = [
     label: 'Spain / EU emergency',
     category: 'emergency',
     phone: '112',
-    notes: 'Police, fire, medical. English-speaking dispatchers available.',
+    notes: 'Spain\'s equivalent of 911 in the US — one number for police, fire, and medical. English-speaking dispatchers available.',
   },
   {
     id: 'us-embassy-madrid',

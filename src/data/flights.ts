@@ -182,6 +182,42 @@ export const flights: Flight[] = [
     notes: 'Overnight connection from UA 8967 PMI → FRA.',
   },
 
+  // ─── Vani · ATL ↔ PMI ── PLACEHOLDER, no flights booked yet ─────────────
+  {
+    id: 'vani-out',
+    airline: 'TBD',
+    flightNumber: 'TBD',
+    travelers: ['Vani'],
+    families: ['vani'],
+    departDate: '2026-08-08',
+    departTime: 'TBD',
+    departAirport: 'ATL',
+    departAirportName: 'Atlanta',
+    arriveDate: '2026-08-09',
+    arriveTime: 'TBD',
+    arriveAirport: 'PMI',
+    arriveAirportName: 'Palma de Mallorca',
+    status: 'needs-action',
+    notes: 'Placeholder — flight details TBD. ATL ↔ PMI has no direct service so expect at least one connection (likely via a US or European hub).',
+  },
+  {
+    id: 'vani-ret',
+    airline: 'TBD',
+    flightNumber: 'TBD',
+    travelers: ['Vani'],
+    families: ['vani'],
+    departDate: '2026-08-14',
+    departTime: 'TBD',
+    departAirport: 'PMI',
+    departAirportName: 'Palma de Mallorca',
+    arriveDate: '2026-08-15',
+    arriveTime: 'TBD',
+    arriveAirport: 'ATL',
+    arriveAirportName: 'Atlanta',
+    status: 'needs-action',
+    notes: 'Placeholder — flight details TBD. Likely overnight via a European hub.',
+  },
+
   // Return: Madrid → Atlanta (Sorianos + Hykers)
   {
     id: 'dl109-ret',

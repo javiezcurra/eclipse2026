@@ -94,6 +94,20 @@ export const itinerary: ItineraryEvent[] = [
     status: 'needs-action',
   },
 
+  // ─── Vani · Atlanta → Palma de Mallorca ── PLACEHOLDER ──────────────────
+  {
+    id: 'evt-vani-out',
+    date: '2026-08-08',
+    endDate: '2026-08-09',
+    startTime: 'TBD',
+    type: 'flight',
+    title: 'Vani: Atlanta → Palma de Mallorca',
+    location: 'ATL → PMI · placeholder',
+    families: ['vani'],
+    status: 'needs-action',
+    refId: 'vani-out',
+  },
+
   // ─── Wheelocks · Atlanta → Frankfurt → Palma de Mallorca ─────────────────
   {
     id: 'evt-ua8830-out',
@@ -303,6 +317,20 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
     status: 'booked',
     refId: 'ux6066-ret',
+  },
+
+  // ─── Vani · Palma de Mallorca → Atlanta ── PLACEHOLDER ──────────────────
+  {
+    id: 'evt-vani-ret',
+    date: '2026-08-14',
+    endDate: '2026-08-15',
+    startTime: 'TBD',
+    type: 'flight',
+    title: 'Vani: Palma de Mallorca → Atlanta',
+    location: 'PMI → ATL · placeholder',
+    families: ['vani'],
+    status: 'needs-action',
+    refId: 'vani-ret',
   },
 
   // ─── Wheelocks · Palma de Mallorca → Frankfurt → Atlanta ─────────────────

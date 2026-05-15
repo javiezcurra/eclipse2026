@@ -1,0 +1,156 @@
+---
+// Thin, dismissible banner that prompts the user to install the site
+// to their home screen. The banner is hidden on initial server render
+// and revealed by the script only when:
+//   - The page is NOT already in standalone/PWA mode, AND
+//   - The user has not previously dismissed the banner (localStorage).
+// Tapping the banner body opens a modal with platform-specific steps.
+// Tapping the X on the banner permanently dismisses it.
+---
+
+<div
+  id="install-banner"
+  class="hidden border-b border-sun-500/30 bg-gradient-to-r from-sun-500/15 via-sun-500/10 to-sun-400/10"
+>
+  <div class="mx-auto flex max-w-5xl items-center gap-2 px-4 py-2 sm:px-6 lg:px-8">
+    <button
+      type="button"
+      id="install-banner-body"
+      aria-haspopup="dialog"
+      class="flex flex-1 items-center gap-2 text-left text-sm text-fg hover:text-fg-strong"
+    >
+      <span aria-hidden="true" class="text-base leading-none">📱</span>
+      <span class="font-medium">Save this trip as an app on your phone</span>
+      <span class="hidden text-xs text-fg-muted sm:inline">— tap for how</span>
+      <svg class="ml-auto h-3.5 w-3.5 text-fg-subtle sm:ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button
+      type="button"
+      id="install-banner-dismiss"
+      aria-label="Dismiss"
+      class="shrink-0 rounded-md p-1 text-fg-muted hover:bg-card-2 hover:text-fg-strong"
+    >
+      <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<dialog
+  id="install-modal"
+  aria-labelledby="install-modal-title"
+  class="modal w-[min(100%-1.5rem,34rem)] rounded-2xl border border-line bg-card p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+>
+  <form method="dialog" class="contents">
+    <header class="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
+      <div>
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-sun-700 dark:text-sun-400">Save as an app</p>
+        <h2 id="install-modal-title" class="mt-0.5 text-lg font-bold text-fg-strong">Get this on your home screen</h2>
+        <p class="mt-1 text-sm text-fg-muted">Looks and launches like a real app · works offline on the plane and in cafés with bad Wi-Fi.</p>
+      </div>
+      <button
+        type="submit"
+        value="close"
+        class="-mr-2 -mt-2 rounded-md p-2 text-fg-muted hover:bg-card-2 hover:text-fg-strong"
+        aria-label="Close"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+
+    <div class="space-y-5 px-5 py-5">
+      <section data-platform="ios">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-fg-strong">
+          <span aria-hidden="true">📱</span>
+          iPhone / iPad (Safari)
+        </h3>
+        <ol class="ml-4 list-decimal space-y-1 text-sm text-fg">
+          <li>Tap the <strong>Share</strong> button (the square with an arrow pointing up).</li>
+          <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+          <li>Tap <strong>Add</strong> in the top right.</li>
+        </ol>
+      </section>
+
+      <section data-platform="android">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-fg-strong">
+          <span aria-hidden="true">🤖</span>
+          Android (Chrome)
+        </h3>
+        <ol class="ml-4 list-decimal space-y-1 text-sm text-fg">
+          <li>Tap the <strong>menu</strong> (the three dots in the top right).</li>
+          <li>Tap <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
+          <li>Tap <strong>Install</strong>.</li>
+        </ol>
+      </section>
+
+      <section data-platform="desktop">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-fg-strong">
+          <span aria-hidden="true">💻</span>
+          Desktop (Chrome / Edge)
+        </h3>
+        <ol class="ml-4 list-decimal space-y-1 text-sm text-fg">
+          <li>Click the small <strong>install icon</strong> at the right end of the address bar.</li>
+          <li>Or open the browser menu and click <strong>Install Eclipse 2026</strong>.</li>
+          <li>Click <strong>Install</strong>.</li>
+        </ol>
+      </section>
+    </div>
+
+    <footer class="flex justify-end gap-2 border-t border-line px-5 py-4">
+      <button
+        type="submit"
+        value="close"
+        class="rounded-lg border border-line px-4 py-2 text-sm font-medium text-fg hover:bg-card-2"
+      >
+        Got it
+      </button>
+    </footer>
+  </form>
+</dialog>
+
+<script>
+  // ── Visibility logic ────────────────────────────────────────────────
+  function isStandalone(): boolean {
+    if (window.matchMedia('(display-mode: standalone)').matches) return true;
+    // iOS Safari uses a non-standard property:
+    return Boolean((window.navigator as unknown as { standalone?: boolean }).standalone);
+  }
+  function isDismissed(): boolean {
+    try { return localStorage.getItem('install-banner-dismissed') === '1'; } catch { return false; }
+  }
+
+  const banner = document.getElementById('install-banner');
+  const modal = document.getElementById('install-modal') as HTMLDialogElement | null;
+  const body = document.getElementById('install-banner-body');
+  const dismiss = document.getElementById('install-banner-dismiss');
+
+  if (banner && !isStandalone() && !isDismissed()) {
+    banner.classList.remove('hidden');
+
+    // Optional emphasis: highlight the section matching the visitor's platform.
+    if (modal) {
+      const ua = navigator.userAgent;
+      let platform: 'ios' | 'android' | 'desktop' = 'desktop';
+      if (/iPad|iPhone|iPod/.test(ua)) platform = 'ios';
+      else if (/Android/.test(ua)) platform = 'android';
+      const section = modal.querySelector<HTMLElement>(`[data-platform="${platform}"]`);
+      section?.classList.add('rounded-lg', 'border', 'border-sun-500/40', 'bg-sun-500/5', 'p-3');
+    }
+  }
+
+  // ── Events ──────────────────────────────────────────────────────────
+  body?.addEventListener('click', () => modal?.showModal());
+
+  dismiss?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    banner?.classList.add('hidden');
+    try { localStorage.setItem('install-banner-dismissed', '1'); } catch {}
+  });
+
+  // Click outside modal content closes it (shared modal pattern).
+  modal?.addEventListener('click', (e) => {
+    const rect = modal.getBoundingClientRect();
+    const inside = e.clientX >= rect.left && e.clientX <= rect.right
+                && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (!inside) modal.close();
+  });
+</script>
