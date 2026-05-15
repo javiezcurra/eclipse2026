@@ -40,6 +40,25 @@ const desc = description ?? trip.tagline;
         } catch (_) {}
       })();
     </script>
+    {/* PWA auto-reload: when the service worker installs a new build's
+        precache manifest (each build emits a fresh content-hashed sw.js),
+        the new SW activates and claims this client; we reload so the user
+        is immediately on the new version. Also polls for new builds
+        hourly while the app stays open. Pairs with registerType:
+        'autoUpdate' in astro.config.mjs. */}
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          if (refreshing) return;
+          refreshing = true;
+          window.location.reload();
+        });
+        navigator.serviceWorker.ready.then(function (reg) {
+          setInterval(function () { reg.update().catch(function () {}); }, 60 * 60 * 1000);
+        });
+      }
+    </script>
   </head>
   <body class="min-h-screen bg-page text-fg antialiased">
     <InstallBanner />
