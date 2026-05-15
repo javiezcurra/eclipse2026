@@ -6,26 +6,42 @@ import { trip } from '../data/trip';
 const dateLabel = new Date(trip.eclipseDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
 const timeline = [
-  { label: 'First contact (partial begins)', time: eclipse.c1, key: 'c1' },
-  { label: 'Totality begins (C2)', time: eclipse.c2, key: 'c2', highlight: true },
-  { label: 'Maximum eclipse', time: eclipse.max, key: 'max', highlight: true },
-  { label: 'Totality ends (C3)', time: eclipse.c3, key: 'c3', highlight: true },
-  { label: 'Fourth contact (partial ends)', time: eclipse.c4, key: 'c4' },
+  { label: 'First contact (partial begins)', time: eclipse.c1 },
+  { label: 'Totality begins (C2)', time: eclipse.c2, highlight: true },
+  { label: 'Maximum eclipse', time: eclipse.max, highlight: true },
+  { label: 'Totality ends (C3)', time: eclipse.c3, highlight: true },
+  { label: 'Fourth contact (partial ends)', time: eclipse.c4 },
 ];
+
+function mapsSearchUrl(query: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
 ---
 
 <Base title="Eclipse Day">
-  <header class="relative mb-8 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card via-card to-card-2 p-6 sm:p-8">
+  <header class="relative mb-6 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card via-card to-card-2 p-6 sm:p-8">
     <div class="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br from-sun-400/40 to-sun-500/10 blur-2xl"></div>
     <div class="relative">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-500 dark:text-sun-400">{dateLabel}</p>
-      <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">Total Solar Eclipse</h1>
-      <p class="mt-2 max-w-2xl text-fg-muted">Northern Spain · totality lasts {eclipse.durationOfTotality} · sun altitude at max: {eclipse.sunAltitude}</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">Total Solar Eclipse · Mallorca</h1>
+      <p class="mt-2 max-w-2xl text-fg-muted">Totality of {eclipse.durationOfTotality}. Sun altitude at max: {eclipse.sunAltitude}. This is essentially a sunset eclipse — viewing site needs a clear western horizon.</p>
     </div>
   </header>
 
+  <!-- Glasses callout: prominent and reassuring. -->
+  <aside class="mb-8 flex items-start gap-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5">
+    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-2xl" aria-hidden="true">🕶️</div>
+    <div>
+      <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{eclipse.glasses.headline}</p>
+      <p class="mt-1 text-sm text-fg">{eclipse.glasses.notes}</p>
+    </div>
+  </aside>
+
   <section class="mb-8 rounded-2xl border border-line bg-card p-5">
-    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-muted">Timing (Spain local · CEST)</h2>
+    <div class="mb-4 flex items-baseline justify-between gap-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-fg-muted">Timing (Spain local · CEST)</h2>
+      <span class="text-[11px] text-fg-subtle">Approximate · confirm for chosen site</span>
+    </div>
     <ol class="space-y-2">
       {timeline.map((t) => (
         <li class:list={[
@@ -37,21 +53,69 @@ const timeline = [
         </li>
       ))}
     </ol>
-    <p class="mt-3 text-xs text-fg-subtle">Times are approximate until a final viewing site is chosen. The exact local circumstances depend on your latitude/longitude.</p>
   </section>
 
-  <section class="mb-8 grid gap-4 sm:grid-cols-2">
-    <div class="rounded-2xl border border-line bg-card p-5">
-      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-fg-muted">Viewing site</h2>
-      <p class="text-base font-semibold text-fg-strong">{eclipse.viewingSite.name}</p>
-      <p class="mt-2 text-sm text-fg">{eclipse.viewingSite.notes}</p>
+  <!-- Viewing site options. -->
+  <section class="mb-8">
+    <div class="mb-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-fg-muted">Where we'll watch from</h2>
+      <p class="mt-1 text-sm text-fg">{eclipse.viewingSite.summary}</p>
+      <p class="mt-1 text-xs text-fg-muted">{eclipse.viewingSite.notes}</p>
     </div>
-    <div class="rounded-2xl border border-line bg-card p-5">
-      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-fg-muted">Backup plan</h2>
-      <ul class="list-disc space-y-1 pl-5 text-sm text-fg">
-        {eclipse.backupSites.map((b) => <li>{b}</li>)}
-      </ul>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      {eclipse.viewingOptions.map((opt) => (
+        <article class="flex flex-col rounded-2xl border border-line bg-card p-5">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl leading-none" aria-hidden="true">{opt.icon}</span>
+            <h3 class="text-base font-semibold text-fg-strong">{opt.name}</h3>
+          </div>
+
+          <div class="mt-4">
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Pros</p>
+            <ul class="space-y-1.5 text-sm text-fg">
+              {opt.pros.map((p) => (
+                <li class="flex items-start gap-2">
+                  <svg class="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="mt-3">
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-400">Cons</p>
+            <ul class="space-y-1.5 text-sm text-fg">
+              {opt.cons.map((c) => (
+                <li class="flex items-start gap-2">
+                  <svg class="mt-1 h-3 w-3 shrink-0 text-rose-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {opt.mapQuery && (
+            <a
+              href={mapsSearchUrl(opt.mapQuery)}
+              target="_blank"
+              rel="noopener"
+              class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-line bg-card-2 px-3 py-2 text-xs font-medium text-fg hover:border-line-strong hover:bg-card"
+            >
+              Open in Google Maps
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </a>
+          )}
+        </article>
+      ))}
     </div>
+  </section>
+
+  <section class="mb-8 rounded-2xl border border-line bg-card p-5">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-fg-muted">Backup plan</h2>
+    <ul class="list-disc space-y-1 pl-5 text-sm text-fg">
+      {eclipse.backupPlan.map((b) => <li>{b}</li>)}
+    </ul>
   </section>
 
   <section class="mb-8 rounded-2xl border border-sun-500/30 bg-sun-500/5 p-5">
