@@ -2,6 +2,7 @@
 import type { Lodging } from '../data/types';
 import FamilyChips from './FamilyChips.astro';
 import StatusBadge from './StatusBadge.astro';
+import { listingLabel } from '../lib/url';
 
 interface Props {
   lodging: Lodging;
@@ -90,9 +91,12 @@ const titleId = `${modalId}-title`;
         )}
         {l.website && (
           <div class="sm:col-span-2">
-            <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Website</dt>
+            <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Listing</dt>
             <dd>
-              <a href={l.website} target="_blank" rel="noopener" class="text-sky-700 dark:text-sky-300 underline-offset-2 hover:underline">{l.website.replace(/^https?:\/\//, '')}</a>
+              <a href={l.website} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-sky-700 dark:text-sky-300 underline-offset-2 hover:underline">
+                {listingLabel(l.website)}
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
             </dd>
           </div>
         )}
