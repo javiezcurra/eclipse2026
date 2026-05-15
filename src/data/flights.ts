@@ -218,6 +218,42 @@ export const flights: Flight[] = [
     notes: 'Placeholder — flight details TBD. Likely overnight via a European hub.',
   },
 
+  // ─── Dev-Kev · ATL ↔ Spain ── PLACEHOLDER, no flights booked yet ────────
+  {
+    id: 'dev-kev-out',
+    airline: 'TBD',
+    flightNumber: 'TBD',
+    travelers: ['Devon', 'Kevin'],
+    families: ['dev-kev'],
+    departDate: '2026-07-30',
+    departTime: 'TBD',
+    departAirport: 'ATL',
+    departAirportName: 'Atlanta',
+    arriveDate: '2026-07-31',
+    arriveTime: 'TBD',
+    arriveAirport: 'BCN',
+    arriveAirportName: 'Barcelona–El Prat',
+    status: 'needs-action',
+    notes: 'Placeholder — flight details TBD. Likely overnight transatlantic; expect at least one connection.',
+  },
+  {
+    id: 'dev-kev-ret',
+    airline: 'TBD',
+    flightNumber: 'TBD',
+    travelers: ['Devon', 'Kevin'],
+    families: ['dev-kev'],
+    departDate: '2026-08-15',
+    departTime: 'TBD',
+    departAirport: 'MAD',
+    departAirportName: 'Madrid–Barajas',
+    arriveDate: '2026-08-15',
+    arriveTime: 'TBD',
+    arriveAirport: 'ATL',
+    arriveAirportName: 'Atlanta',
+    status: 'needs-action',
+    notes: 'Placeholder — flight details TBD.',
+  },
+
   // Return: Madrid → Atlanta (Sorianos + Hykers)
   {
     id: 'dl109-ret',
