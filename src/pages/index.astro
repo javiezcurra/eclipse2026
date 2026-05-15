@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import HappeningNow from '../components/HappeningNow.astro';
 import { trip } from '../data/trip';
-import { families } from '../data/families';
-import { familyColorClasses } from '../data/families';
+import { families, familyColorClasses } from '../data/families';
 import { url } from '../lib/url';
+
 const eclipseDateLabel = new Date(trip.eclipseDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
 const cards = [
@@ -18,9 +18,9 @@ const cards = [
 
 <Base title="Home">
   <header class="mb-8 text-center sm:text-left">
-    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-400">{eclipseDateLabel}</p>
-    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-100 sm:text-4xl">{trip.name}</h1>
-    <p class="mt-2 max-w-2xl text-slate-300">{trip.tagline}</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-500 dark:text-sun-400">{eclipseDateLabel}</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">{trip.name}</h1>
+    <p class="mt-2 max-w-2xl text-fg-muted">{trip.tagline}</p>
   </header>
 
   <div class="mb-8">
@@ -28,7 +28,7 @@ const cards = [
   </div>
 
   <section class="mb-10">
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Travelers</h2>
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-fg-muted">Travelers</h2>
     <ul class="flex flex-wrap gap-2">
       {families.map((f) => {
         const c = familyColorClasses[f.color];
@@ -44,13 +44,13 @@ const cards = [
   </section>
 
   <section>
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Sections</h2>
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-fg-muted">Sections</h2>
     <div class="grid gap-3 sm:grid-cols-2">
       {cards.map((card) => (
-        <a href={url(card.href)} class="group rounded-2xl border border-night-800 bg-night-900/60 p-4 transition-colors hover:border-slate-500 hover:bg-night-900">
+        <a href={url(card.href)} class="group rounded-2xl border border-line bg-card p-4 transition-colors hover:border-line-strong hover:bg-card-2">
           <div class:list={['mb-3 inline-block h-1.5 w-10 rounded-full bg-gradient-to-r', card.accent]}></div>
-          <h3 class="text-base font-semibold text-slate-100 group-hover:text-white">{card.title}</h3>
-          <p class="mt-1 text-sm text-slate-400">{card.desc}</p>
+          <h3 class="text-base font-semibold text-fg-strong">{card.title}</h3>
+          <p class="mt-1 text-sm text-fg-muted">{card.desc}</p>
         </a>
       ))}
     </div>

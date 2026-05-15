@@ -15,51 +15,51 @@ const timeline = [
 ---
 
 <Base title="Eclipse Day">
-  <header class="relative mb-8 overflow-hidden rounded-2xl border border-night-800 bg-gradient-to-br from-night-900 via-night-900 to-night-950 p-6 sm:p-8">
+  <header class="relative mb-8 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card via-card to-card-2 p-6 sm:p-8">
     <div class="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br from-sun-400/40 to-sun-500/10 blur-2xl"></div>
     <div class="relative">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-400">{dateLabel}</p>
-      <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-100 sm:text-4xl">Total Solar Eclipse</h1>
-      <p class="mt-2 max-w-2xl text-slate-300">Northern Spain · totality lasts {eclipse.durationOfTotality} · sun altitude at max: {eclipse.sunAltitude}</p>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-500 dark:text-sun-400">{dateLabel}</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">Total Solar Eclipse</h1>
+      <p class="mt-2 max-w-2xl text-fg-muted">Northern Spain · totality lasts {eclipse.durationOfTotality} · sun altitude at max: {eclipse.sunAltitude}</p>
     </div>
   </header>
 
-  <section class="mb-8 rounded-2xl border border-night-800 bg-night-900/60 p-5">
-    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-400">Timing (Spain local · CEST)</h2>
+  <section class="mb-8 rounded-2xl border border-line bg-card p-5">
+    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-muted">Timing (Spain local · CEST)</h2>
     <ol class="space-y-2">
       {timeline.map((t) => (
         <li class:list={[
           'flex items-center justify-between rounded-lg border px-3 py-2',
-          t.highlight ? 'border-sun-500/50 bg-sun-500/10' : 'border-night-800 bg-night-900',
+          t.highlight ? 'border-sun-500/50 bg-sun-500/10' : 'border-line bg-card-2',
         ]}>
-          <span class:list={['font-medium', t.highlight ? 'text-sun-300' : 'text-slate-200']}>{t.label}</span>
-          <span class:list={['font-mono text-sm', t.highlight ? 'text-sun-200' : 'text-slate-400']}>{t.time}</span>
+          <span class:list={['font-medium', t.highlight ? 'text-sun-700 dark:text-sun-300' : 'text-fg']}>{t.label}</span>
+          <span class:list={['font-mono text-sm', t.highlight ? 'text-sun-700 dark:text-sun-200' : 'text-fg-muted']}>{t.time}</span>
         </li>
       ))}
     </ol>
-    <p class="mt-3 text-xs text-slate-500">Times are approximate until a final viewing site is chosen. The exact local circumstances depend on your latitude/longitude.</p>
+    <p class="mt-3 text-xs text-fg-subtle">Times are approximate until a final viewing site is chosen. The exact local circumstances depend on your latitude/longitude.</p>
   </section>
 
   <section class="mb-8 grid gap-4 sm:grid-cols-2">
-    <div class="rounded-2xl border border-night-800 bg-night-900/60 p-5">
-      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-400">Viewing site</h2>
-      <p class="text-base font-semibold text-slate-100">{eclipse.viewingSite.name}</p>
-      <p class="mt-2 text-sm text-slate-300">{eclipse.viewingSite.notes}</p>
+    <div class="rounded-2xl border border-line bg-card p-5">
+      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-fg-muted">Viewing site</h2>
+      <p class="text-base font-semibold text-fg-strong">{eclipse.viewingSite.name}</p>
+      <p class="mt-2 text-sm text-fg">{eclipse.viewingSite.notes}</p>
     </div>
-    <div class="rounded-2xl border border-night-800 bg-night-900/60 p-5">
-      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-400">Backup plan</h2>
-      <ul class="list-disc space-y-1 pl-5 text-sm text-slate-300">
+    <div class="rounded-2xl border border-line bg-card p-5">
+      <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-fg-muted">Backup plan</h2>
+      <ul class="list-disc space-y-1 pl-5 text-sm text-fg">
         {eclipse.backupSites.map((b) => <li>{b}</li>)}
       </ul>
     </div>
   </section>
 
   <section class="mb-8 rounded-2xl border border-sun-500/30 bg-sun-500/5 p-5">
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-sun-300">Totality checklist</h2>
-    <ul class="space-y-2 text-sm text-slate-200">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-sun-700 dark:text-sun-300">Totality checklist</h2>
+    <ul class="space-y-2 text-sm text-fg">
       {eclipse.totalityChecklist.map((c) => (
         <li class="flex items-start gap-2">
-          <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sun-400"></span>
+          <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-sun-500 dark:bg-sun-400"></span>
           <span>{c}</span>
         </li>
       ))}
@@ -67,11 +67,11 @@ const timeline = [
   </section>
 
   <section class="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-5">
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-rose-300">Eye safety</h2>
-    <ul class="space-y-2 text-sm text-slate-200">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300">Eye safety</h2>
+    <ul class="space-y-2 text-sm text-fg">
       {eclipse.safety.map((s) => (
         <li class="flex items-start gap-2">
-          <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400"></span>
+          <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500 dark:bg-rose-400"></span>
           <span>{s}</span>
         </li>
       ))}

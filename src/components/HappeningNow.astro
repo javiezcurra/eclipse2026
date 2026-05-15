@@ -1,8 +1,6 @@
 ---
 import { sortedItinerary } from '../data/itinerary';
 import { trip } from '../data/trip';
-import EventTypeIcon from './EventTypeIcon.astro';
-import FamilyChips from './FamilyChips.astro';
 
 const events = sortedItinerary();
 
@@ -21,13 +19,13 @@ const payload = JSON.stringify(
 );
 ---
 
-<section class="rounded-2xl border border-night-800 bg-night-900/60 p-5">
+<section class="rounded-2xl border border-line bg-card p-5">
   <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Happening now</h2>
-    <span id="now-clock" class="text-xs text-slate-500" data-tz={trip.timeZone}></span>
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-fg-muted">Happening now</h2>
+    <span id="now-clock" class="text-xs text-fg-subtle" data-tz={trip.timeZone}></span>
   </div>
-  <div id="now-content" class="space-y-3 text-sm text-slate-300">
-    <p class="text-slate-400">Loading trip status…</p>
+  <div id="now-content" class="space-y-3 text-sm text-fg">
+    <p class="text-fg-muted">Loading trip status…</p>
   </div>
 </section>
 
@@ -72,7 +70,7 @@ const payload = JSON.stringify(
 
     let html = '';
     if (sorted.length === 0) {
-      container.innerHTML = '<p class="text-slate-400">No itinerary events yet.</p>';
+      container.innerHTML = '<p class="text-fg-muted">No itinerary events yet.</p>';
       return;
     }
 
@@ -80,22 +78,22 @@ const payload = JSON.stringify(
     const tripEnd = sorted[sorted.length - 1].date;
     if (date < tripStart) {
       const days = Math.ceil((Date.parse(tripStart) - Date.parse(date)) / 86400000);
-      html += `<p class="text-base text-slate-200"><span class="text-sun-400 font-semibold">${days} day${days === 1 ? '' : 's'}</span> until the trip starts.</p>`;
+      html += `<p class="text-base text-fg-strong"><span class="text-sun-500 dark:text-sun-400 font-semibold">${days} day${days === 1 ? '' : 's'}</span> until the trip starts.</p>`;
     } else if (date > tripEnd) {
-      html += `<p class="text-slate-400">The trip has ended. Hope it was amazing! 🌅</p>`;
+      html += `<p class="text-fg-muted">The trip has ended. Hope it was amazing! 🌅</p>`;
     } else {
       if (happeningNow.length > 0) {
-        html += '<div><p class="mb-1 text-[11px] uppercase tracking-wider text-emerald-400">Now</p>';
+        html += '<div><p class="mb-1 text-[11px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Now</p>';
         html += happeningNow.map(renderEvent).join('');
         html += '</div>';
       }
       if (upcoming.length > 0) {
-        html += '<div><p class="mb-1 mt-3 text-[11px] uppercase tracking-wider text-sky-400">Up next</p>';
+        html += '<div><p class="mb-1 mt-3 text-[11px] uppercase tracking-wider text-sky-600 dark:text-sky-400">Up next</p>';
         html += upcoming.map(renderEvent).join('');
         html += '</div>';
       }
       if (happeningNow.length === 0 && upcoming.length === 0) {
-        html += '<p class="text-slate-400">Nothing else scheduled.</p>';
+        html += '<p class="text-fg-muted">Nothing else scheduled.</p>';
       }
     }
     container.innerHTML = html;
@@ -105,9 +103,9 @@ const payload = JSON.stringify(
     const dateLabel = new Date(`${e.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     const time = e.startTime ? `${e.startTime}${e.endTime ? `–${e.endTime}` : ''}` : 'all day';
     const loc = e.location ? ` · ${e.location}` : '';
-    return `<div class="rounded-lg border border-night-800 bg-night-900 px-3 py-2">
-      <div class="text-xs text-slate-400">${dateLabel} · ${time}${loc}</div>
-      <div class="font-medium text-slate-100">${e.title}</div>
+    return `<div class="rounded-lg border border-line bg-card-2 px-3 py-2">
+      <div class="text-xs text-fg-subtle">${dateLabel} · ${time}${loc}</div>
+      <div class="font-medium text-fg-strong">${e.title}</div>
     </div>`;
   }
 

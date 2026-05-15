@@ -4,15 +4,15 @@ import type { ItineraryEvent } from './types';
 // `families: []` means everyone; otherwise list the family ids that participate.
 export const itinerary: ItineraryEvent[] = [
   {
-    id: 'arrive-mad-ezcurra',
+    id: 'arrive-mad-sorianos',
     date: '2026-08-06',
     startTime: '08:45',
     type: 'flight',
-    title: 'Ezcurras land in Madrid (MAD)',
+    title: 'Sorianos land in Madrid (MAD)',
     location: 'Madrid-Barajas Airport',
-    families: ['ezcurra'],
+    families: ['sorianos'],
     status: 'tentative',
-    refId: 'flight-ezcurra-outbound',
+    refId: 'flight-sorianos-outbound',
   },
   {
     id: 'madrid-checkin',
@@ -21,7 +21,7 @@ export const itinerary: ItineraryEvent[] = [
     type: 'lodging-checkin',
     title: 'Check in: Madrid apartment',
     location: 'Madrid',
-    families: ['ezcurra'],
+    families: ['sorianos'],
     status: 'tentative',
     refId: 'lodging-madrid',
   },

@@ -1,5 +1,6 @@
 ---
 import { url } from '../lib/url';
+import ThemeToggle from './ThemeToggle.astro';
 
 const links = [
   { path: '', label: 'Home' },
@@ -19,35 +20,38 @@ function isActive(path: string): boolean {
 }
 ---
 
-<nav class="sticky top-0 z-30 border-b border-night-800 bg-night-950/85 backdrop-blur">
+<nav class="sticky top-0 z-30 border-b border-line bg-page/85 backdrop-blur">
   <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
     <a href={homeUrl} class="flex items-center gap-2 font-semibold tracking-tight">
       <span class="inline-block h-6 w-6 rounded-full bg-gradient-to-br from-sun-400 to-sun-500 shadow-[0_0_24px_rgba(245,158,11,0.55)]"></span>
-      <span class="text-slate-100">Eclipse 2026</span>
+      <span class="text-fg-strong">Eclipse 2026</span>
     </a>
-    <button id="nav-toggle" class="rounded-md p-2 text-slate-300 hover:bg-night-800 sm:hidden" aria-label="Toggle menu" aria-expanded="false">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <ul id="nav-links" class="hidden gap-1 text-sm sm:flex">
-      {links.map((l) => (
-        <li>
-          <a
-            href={url(l.path)}
-            class:list={[
-              'rounded-md px-3 py-2 transition-colors',
-              isActive(l.path) ? 'bg-night-800 text-slate-100' : 'text-slate-300 hover:bg-night-800 hover:text-slate-100',
-            ]}
-          >
-            {l.label}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="flex items-center gap-2">
+      <ul id="nav-links" class="hidden gap-1 text-sm sm:flex">
+        {links.map((l) => (
+          <li>
+            <a
+              href={url(l.path)}
+              class:list={[
+                'rounded-md px-3 py-2 transition-colors',
+                isActive(l.path) ? 'bg-card-2 text-fg-strong' : 'text-fg-muted hover:bg-card-2 hover:text-fg-strong',
+              ]}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ThemeToggle />
+      <button id="nav-toggle" class="rounded-md p-2 text-fg-muted hover:bg-card-2 sm:hidden" aria-label="Toggle menu" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
   </div>
-  <ul id="nav-links-mobile" class="hidden flex-col gap-1 border-t border-night-800 px-4 py-2 text-sm sm:hidden">
+  <ul id="nav-links-mobile" class="hidden flex-col gap-1 border-t border-line px-4 py-2 text-sm sm:hidden">
     {links.map((l) => (
       <li>
-        <a href={url(l.path)} class="block rounded-md px-3 py-2 text-slate-200 hover:bg-night-800">{l.label}</a>
+        <a href={url(l.path)} class="block rounded-md px-3 py-2 text-fg hover:bg-card-2">{l.label}</a>
       </li>
     ))}
   </ul>

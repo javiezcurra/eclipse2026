@@ -7,10 +7,10 @@ interface Props {
 const { status } = Astro.props;
 
 const styles: Record<EventStatus, { label: string; classes: string }> = {
-  confirmed:      { label: 'Confirmed',     classes: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
-  booked:         { label: 'Booked',        classes: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
-  tentative:      { label: 'Tentative',     classes: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-  'needs-action': { label: 'Needs action',  classes: 'bg-rose-500/15 text-rose-300 border-rose-500/30' },
+  confirmed:      { label: 'Confirmed',     classes: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40' },
+  booked:         { label: 'Booked',        classes: 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/40' },
+  tentative:      { label: 'Tentative',     classes: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40' },
+  'needs-action': { label: 'Needs action',  classes: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/40' },
 };
 const s = styles[status];
 ---
