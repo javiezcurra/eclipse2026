@@ -1,46 +1,97 @@
 import type { Lodging } from './types';
 
-// Placeholder lodging — replace as bookings firm up.
 export const lodging: Lodging[] = [
+  // Aug 3–6 · Madrid (Sorianos + Hykers)
   {
-    id: 'lodging-madrid',
-    name: 'Madrid lodging (TBD)',
-    kind: 'TBD',
-    address: 'Madrid',
+    id: 'lodging-madrid-1',
+    name: 'Apartment in Madrid',
+    kind: 'Airbnb',
+    host: 'Ramon',
+    address: 'Calle de Zaragoza, 11, 28012 Madrid, Spain',
+    mapQuery: 'Calle de Zaragoza 11, 28012 Madrid, Spain',
     checkInDate: '2026-08-03',
     checkInTime: '15:00',
-    checkOutDate: '2026-08-09',
+    checkOutDate: '2026-08-06',
     checkOutTime: '11:00',
     guests: ['Javier', 'Allison', 'Luna', 'David', 'Kit'],
     families: ['sorianos', 'hykers'],
-    status: 'needs-action',
+    status: 'booked',
   },
+
+  // Aug 6–9 · Castillo del Buen Amor, Salamanca (Sorianos + Hykers + Dev-Kev)
+  {
+    id: 'lodging-salamanca',
+    name: 'Castillo del Buen Amor',
+    kind: 'Castle hotel · B&B',
+    address: 'Topas, Salamanca, Spain',
+    mapQuery: 'Castillo del Buen Amor, Topas, Salamanca',
+    website: 'https://castillodelbuenamor.com',
+    confirmation: 'HPLLRQW',
+    checkInDate: '2026-08-06',
+    checkInTime: '16:00',
+    checkOutDate: '2026-08-09',
+    checkOutTime: '12:00',
+    guests: ['Javier', 'Allison', 'Luna', 'David', 'Kit', 'Devon', 'Kevin'],
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'booked',
+    notes:
+      'Bed & breakfast. Three suites booked: Paso de Guardia (Mazmorra), Suite con Torreón, and Gran Suite Fonseca. Request on file: extra bed in the kid\'s room.',
+  },
+
+  // Aug 9–14 · Mallorca cottage (everyone — all 13 travelers)
   {
     id: 'lodging-mallorca',
-    name: 'Mallorca lodging (TBD)',
-    kind: 'TBD',
-    address: 'Palma de Mallorca',
+    name: 'Cottage in the Balearic Islands',
+    kind: 'Airbnb cottage',
+    host: 'Agustín M.',
+    address: 'Polígono 7, parcela 332, 07300 Islas Baleares, Spain',
+    mapQuery: 'Polígono 7 parcela 332, 07300 Inca, Mallorca',
     checkInDate: '2026-08-09',
-    checkInTime: '20:00',
+    checkInTime: '17:00',
     checkOutDate: '2026-08-14',
     checkOutTime: '11:00',
-    guests: ['Javier', 'Allison', 'Luna', 'David', 'Kit', 'Devon', 'Kevin', 'Gemma'],
-    families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
-    status: 'needs-action',
-    notes: 'Eclipse-viewing base. Book well in advance — lodging on the island will sell out for eclipse week.',
+    guests: ['Everyone (13)'],
+    families: [], // empty = everyone
+    status: 'booked',
+    notes: 'Eclipse-viewing base. The 8 travelers on UX 6079 land at PMI 18:25; arrival at the cottage will be ~19:30–20:00.',
   },
+
+  // Aug 9–11 · Ibiza side trip (Hykers only) ─── placeholder, not booked yet
   {
-    id: 'lodging-madrid-return',
-    name: 'Madrid lodging — return leg (TBD)',
-    kind: 'TBD',
-    address: 'Madrid',
+    id: 'lodging-ibiza',
+    name: 'Ibiza hotel (TBD)',
+    kind: 'Hotel · placeholder',
+    address: 'Ibiza, Spain',
+    mapQuery: 'Ibiza, Spain',
+    checkInDate: '2026-08-09',
+    checkInTime: '23:30',
+    checkOutDate: '2026-08-11',
+    checkOutTime: '11:00',
+    guests: ['David', 'Kit'],
+    families: ['hykers'],
+    status: 'needs-action',
+    notes: 'Two-night side trip from Mallorca. The Mallorca cottage is still booked for the Hykers across this window — pick which lodging makes sense.',
+  },
+
+  // Aug 14–16 · Madrid return leg (Sorianos + Hykers)
+  {
+    id: 'lodging-madrid-2',
+    name: 'Apartment in Madrid (return leg)',
+    kind: 'Airbnb',
+    host: 'Hui Min',
+    address: 'Calle de Bocángel, 4, 28028 Madrid, Spain',
+    mapQuery: 'Calle de Bocángel 4, 28028 Madrid, Spain',
     checkInDate: '2026-08-14',
-    checkInTime: '19:00',
+    checkInTime: '16:00',
     checkOutDate: '2026-08-16',
-    checkOutTime: '08:00',
+    checkOutTime: '11:00',
     guests: ['Javier', 'Allison', 'Luna', 'David', 'Kit'],
     families: ['sorianos', 'hykers'],
-    status: 'needs-action',
-    notes: 'Two nights in Madrid before the DL 109 return.',
+    status: 'booked',
+    notes: 'Two nights before the DL 109 return. Check-out is well before the 09:50 flight, so leave for MAD early.',
   },
 ];
+
+export function lodgingById(id: string): Lodging | undefined {
+  return lodging.find((l) => l.id === id);
+}

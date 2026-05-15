@@ -1,7 +1,7 @@
 import type { ItineraryEvent } from './types';
 
 // `families: []` means everyone; otherwise list the family ids that participate.
-// `refId` on flight events points to a Flight in flights.ts so the modal can show full details.
+// `refId` on flight/lodging events points to a Flight or Lodging entry for full details.
 export const itinerary: ItineraryEvent[] = [
   // ─── Atlanta → Madrid (Sorianos + Hykers) ────────────────────────────────
   {
@@ -18,27 +18,107 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'dl108-out',
   },
 
-  // ─── Madrid week ─────────────────────────────────────────────────────────
+  // ─── Madrid leg 1 · Aug 3–6 (Sorianos + Hykers) ──────────────────────────
   {
-    id: 'evt-madrid-checkin',
+    id: 'evt-madrid-1-in',
     date: '2026-08-03',
     startTime: '15:00',
     type: 'lodging-checkin',
-    title: 'Check in: Madrid lodging (TBD)',
-    location: 'Madrid',
+    title: 'Check in: Apartment in Madrid',
+    location: 'Calle de Zaragoza, 11, Madrid',
     families: ['sorianos', 'hykers'],
-    status: 'tentative',
-    refId: 'lodging-madrid',
+    status: 'booked',
+    refId: 'lodging-madrid-1',
   },
   {
-    id: 'evt-madrid-tapas-walk',
-    date: '2026-08-07',
-    startTime: '19:00',
-    type: 'activity',
-    title: 'Tapas walk in La Latina (placeholder)',
-    location: 'La Latina, Madrid',
-    families: [],
-    status: 'tentative',
+    id: 'evt-madrid-1-out',
+    date: '2026-08-06',
+    startTime: '11:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Apartment in Madrid',
+    location: 'Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-1',
+  },
+
+  // ─── Madrid → Salamanca train ── PLACEHOLDER, not booked yet ────────────
+  {
+    id: 'evt-train-mad-sal',
+    date: '2026-08-06',
+    startTime: '12:00',
+    endTime: '13:35',
+    type: 'transport',
+    title: 'Train: Madrid → Salamanca',
+    location: 'Madrid Chamartín → Salamanca',
+    details: 'Placeholder timing — book Renfe sailing once dates are confirmed (~1h 35m).',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'needs-action',
+  },
+
+  // ─── Salamanca · Aug 6–9 (Sorianos + Hykers + Dev-Kev) ───────────────────
+  {
+    id: 'evt-salamanca-in',
+    date: '2026-08-06',
+    startTime: '16:00',
+    type: 'lodging-checkin',
+    title: 'Check in: Castillo del Buen Amor',
+    location: 'Topas, Salamanca',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'booked',
+    refId: 'lodging-salamanca',
+  },
+  {
+    id: 'evt-salamanca-out',
+    date: '2026-08-09',
+    startTime: '12:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Castillo del Buen Amor',
+    location: 'Topas, Salamanca',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'booked',
+    refId: 'lodging-salamanca',
+  },
+
+  // ─── Salamanca → Madrid train ── PLACEHOLDER, not booked yet ────────────
+  {
+    id: 'evt-train-sal-mad',
+    date: '2026-08-09',
+    startTime: '13:00',
+    endTime: '14:35',
+    type: 'transport',
+    title: 'Train: Salamanca → Madrid',
+    location: 'Salamanca → Madrid Chamartín',
+    details: 'Placeholder timing — must land in Madrid in time for UX 6079 (departs 17:05).',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'needs-action',
+  },
+
+  // ─── Wheelocks · Atlanta → Frankfurt → Palma de Mallorca ─────────────────
+  {
+    id: 'evt-ua8830-out',
+    date: '2026-08-08',
+    endDate: '2026-08-09',
+    startTime: '15:55',
+    endTime: '06:35',
+    type: 'flight',
+    title: 'Atlanta → Frankfurt (UA 8830)',
+    location: 'ATL → FRA · overnight',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8830-out',
+  },
+  {
+    id: 'evt-ua8999-out',
+    date: '2026-08-09',
+    startTime: '09:00',
+    endTime: '11:10',
+    type: 'flight',
+    title: 'Frankfurt → Palma de Mallorca (UA 8999)',
+    location: 'FRA → PMI',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8999-out',
   },
 
   // ─── Madrid → Mallorca (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────
@@ -54,16 +134,104 @@ export const itinerary: ItineraryEvent[] = [
     status: 'booked',
     refId: 'ux6079-out',
   },
+
+  // ─── Mallorca rental cars · pickup ── PLACEHOLDER ───────────────────────
   {
-    id: 'evt-mallorca-checkin',
+    id: 'evt-car-wheelocks-pickup',
     date: '2026-08-09',
-    startTime: '20:00',
+    startTime: '12:00',
+    type: 'car-rental',
+    title: 'Wheelocks: pick up rental SUV',
+    location: 'PMI airport',
+    details: 'Looking for a large SUV with 3 rows. Book a few months out — eclipse week will be in high demand.',
+    families: ['wheelocks'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-sorianos-pickup',
+    date: '2026-08-09',
+    startTime: '19:00',
+    type: 'car-rental',
+    title: 'Sorianos: pick up rental car',
+    location: 'PMI airport',
+    details: 'Group car for Sorianos + everyone else without their own ride (Hykers, Gemma, Vani). Size accordingly.',
+    families: ['sorianos'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-devkev-own',
+    date: '2026-08-09',
+    startTime: '19:00',
+    type: 'car-rental',
+    title: 'Dev-Kev: own car arrangement',
+    location: 'Mallorca',
+    details: 'Devon and Kevin will sort their own rental separately.',
+    families: ['dev-kev'],
+    status: 'needs-action',
+  },
+
+  // ─── Mallorca · Aug 9–14 (everyone) ──────────────────────────────────────
+  {
+    id: 'evt-mallorca-in',
+    date: '2026-08-09',
+    startTime: '17:00',
     type: 'lodging-checkin',
-    title: 'Check in: Mallorca lodging (TBD)',
-    location: 'Palma de Mallorca',
-    families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
-    status: 'tentative',
+    title: 'Check in: Cottage in the Balearic Islands',
+    location: 'Polígono 7, parcela 332, Mallorca',
+    families: [], // everyone
+    status: 'booked',
     refId: 'lodging-mallorca',
+  },
+
+  // ─── Hykers · Mallorca → Ibiza side trip ── PLACEHOLDER ─────────────────
+  {
+    id: 'evt-ferry-pmi-iza',
+    date: '2026-08-09',
+    startTime: '21:00',
+    endDate: '2026-08-10',
+    endTime: '00:30',
+    type: 'ferry',
+    title: 'Ferry: Mallorca → Ibiza',
+    location: 'Palma → Eivissa',
+    details: 'Placeholder timing — pick a Baleària or Trasmediterránea sailing.',
+    families: ['hykers'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-ibiza-in',
+    date: '2026-08-09',
+    startTime: '23:30',
+    type: 'lodging-checkin',
+    title: 'Check in: Ibiza hotel',
+    location: 'Ibiza',
+    families: ['hykers'],
+    status: 'needs-action',
+    refId: 'lodging-ibiza',
+  },
+
+  // ─── Hykers · Ibiza → Mallorca return ── PLACEHOLDER ────────────────────
+  {
+    id: 'evt-ibiza-out',
+    date: '2026-08-11',
+    startTime: '11:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Ibiza hotel',
+    location: 'Ibiza',
+    families: ['hykers'],
+    status: 'needs-action',
+    refId: 'lodging-ibiza',
+  },
+  {
+    id: 'evt-ferry-iza-pmi',
+    date: '2026-08-11',
+    startTime: '14:00',
+    endTime: '17:30',
+    type: 'ferry',
+    title: 'Ferry: Ibiza → Mallorca',
+    location: 'Eivissa → Palma',
+    details: 'Placeholder timing — pick a return sailing that lands well before the eclipse on Aug 12.',
+    families: ['hykers'],
+    status: 'needs-action',
   },
 
   // ─── Eclipse Day ─────────────────────────────────────────────────────────
@@ -74,22 +242,54 @@ export const itinerary: ItineraryEvent[] = [
     endTime: '21:20',
     type: 'eclipse',
     title: '🌑 TOTALITY — Eclipse viewing',
-    location: 'Mallorca area (viewing site TBD)',
-    details: 'Totality crosses near Mallorca just before sunset. See the Eclipse Day page for the full plan, backup sites, and weather.',
+    location: 'Mallorca',
+    details: 'See the Eclipse Day page for the full plan, timing, and safety checklist.',
     families: [],
     status: 'confirmed',
   },
 
+  // ─── Mallorca rental cars · drop-off ── PLACEHOLDER ─────────────────────
+  {
+    id: 'evt-car-wheelocks-dropoff',
+    date: '2026-08-14',
+    startTime: '14:00',
+    type: 'car-rental',
+    title: 'Wheelocks: return rental SUV',
+    location: 'PMI airport',
+    families: ['wheelocks'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-sorianos-dropoff',
+    date: '2026-08-14',
+    startTime: '15:00',
+    type: 'car-rental',
+    title: 'Sorianos: return rental car',
+    location: 'PMI airport',
+    families: ['sorianos'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-devkev-dropoff',
+    date: '2026-08-14',
+    startTime: '15:00',
+    type: 'car-rental',
+    title: 'Dev-Kev: return own rental',
+    location: 'Mallorca',
+    families: ['dev-kev'],
+    status: 'needs-action',
+  },
+
   // ─── Mallorca → Madrid (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────
   {
-    id: 'evt-mallorca-checkout',
+    id: 'evt-mallorca-out',
     date: '2026-08-14',
     startTime: '11:00',
     type: 'lodging-checkout',
-    title: 'Check out: Mallorca lodging',
-    location: 'Palma de Mallorca',
-    families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
-    status: 'tentative',
+    title: 'Check out: Mallorca cottage',
+    location: 'Polígono 7, parcela 332, Mallorca',
+    families: [],
+    status: 'booked',
     refId: 'lodging-mallorca',
   },
   {
@@ -103,6 +303,56 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
     status: 'booked',
     refId: 'ux6066-ret',
+  },
+
+  // ─── Wheelocks · Palma de Mallorca → Frankfurt → Atlanta ─────────────────
+  {
+    id: 'evt-ua8967-ret',
+    date: '2026-08-14',
+    startTime: '16:05',
+    endTime: '18:30',
+    type: 'flight',
+    title: 'Palma de Mallorca → Frankfurt (UA 8967)',
+    location: 'PMI → FRA · overnight layover',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8967-ret',
+  },
+  {
+    id: 'evt-ua8831-ret',
+    date: '2026-08-15',
+    startTime: '10:10',
+    endTime: '13:45',
+    type: 'flight',
+    title: 'Frankfurt → Atlanta (UA 8831)',
+    location: 'FRA → ATL',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8831-ret',
+  },
+
+  // ─── Madrid leg 2 · Aug 14–16 (Sorianos + Hykers) ────────────────────────
+  {
+    id: 'evt-madrid-2-in',
+    date: '2026-08-14',
+    startTime: '19:00',
+    type: 'lodging-checkin',
+    title: 'Check in: Apartment in Madrid (return leg)',
+    location: 'Calle de Bocángel, 4, Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-2',
+  },
+  {
+    id: 'evt-madrid-2-out',
+    date: '2026-08-16',
+    startTime: '08:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Apartment in Madrid',
+    location: 'Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-2',
   },
 
   // ─── Madrid → Atlanta (Sorianos + Hykers) ────────────────────────────────

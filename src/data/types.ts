@@ -15,6 +15,8 @@ export type EventType =
   | 'lodging-checkin'
   | 'lodging-checkout'
   | 'transport'
+  | 'ferry'
+  | 'car-rental'
   | 'activity'
   | 'meal'
   | 'eclipse'
@@ -76,6 +78,8 @@ export interface Lodging {
   name: string;
   /** e.g. "Hotel", "Airbnb", "Casa rural" */
   kind: string;
+  /** First name of the host, where applicable (Airbnb etc.). */
+  host?: string;
   address?: string;
   mapQuery?: string;
   phone?: string;

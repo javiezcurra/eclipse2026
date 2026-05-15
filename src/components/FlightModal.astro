@@ -23,7 +23,7 @@ const titleId = `${modalId}-title`;
 <dialog
   id={modalId}
   aria-labelledby={titleId}
-  class="flight-modal w-[min(100%-1.5rem,38rem)] rounded-2xl border border-line bg-card p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+  class="modal w-[min(100%-1.5rem,38rem)] rounded-2xl border border-line bg-card p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-sm"
 >
   <form method="dialog" class="contents">
     <header class="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
@@ -131,24 +131,3 @@ const titleId = `${modalId}-title`;
   </form>
 </dialog>
 
-<style>
-  /* Center the native <dialog> nicely and animate it in. */
-  .flight-modal {
-    margin: auto;
-    color-scheme: inherit;
-  }
-  .flight-modal[open] {
-    animation: modal-in 180ms ease-out;
-  }
-  .flight-modal[open]::backdrop {
-    animation: backdrop-in 180ms ease-out;
-  }
-  @keyframes modal-in {
-    from { opacity: 0; transform: translateY(8px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0)   scale(1); }
-  }
-  @keyframes backdrop-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-</style>

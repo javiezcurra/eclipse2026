@@ -1,0 +1,150 @@
+---
+import type { Lodging } from '../data/types';
+import FamilyChips from './FamilyChips.astro';
+import StatusBadge from './StatusBadge.astro';
+
+interface Props {
+  lodging: Lodging;
+  /** Stable id used to wire the trigger button to this dialog. */
+  modalId: string;
+}
+const { lodging: l, modalId } = Astro.props;
+
+function dateLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+const checkIn = new Date(`${l.checkInDate}T00:00:00`);
+const checkOut = new Date(`${l.checkOutDate}T00:00:00`);
+const nights = Math.max(1, Math.round((checkOut.getTime() - checkIn.getTime()) / 86_400_000));
+
+const mapQuery = l.mapQuery || l.address;
+const mapsSearchUrl = mapQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}` : null;
+const mapsDirectionsUrl = mapQuery ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQuery)}` : null;
+
+const titleId = `${modalId}-title`;
+---
+
+<dialog
+  id={modalId}
+  aria-labelledby={titleId}
+  class="modal w-[min(100%-1.5rem,38rem)] rounded-2xl border border-line bg-card p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+>
+  <form method="dialog" class="contents">
+    <header class="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
+      <div>
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-fg-subtle">
+          {l.kind}{l.host && <> · Hosted by {l.host}</>}
+        </p>
+        <h2 id={titleId} class="mt-0.5 text-lg font-bold text-fg-strong">{l.name}</h2>
+      </div>
+      <button
+        type="submit"
+        value="close"
+        class="-mr-2 -mt-2 rounded-md p-2 text-fg-muted hover:bg-card-2 hover:text-fg-strong"
+        aria-label="Close"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+
+    <div class="space-y-5 px-5 py-5">
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <div>
+          <p class="text-[11px] uppercase tracking-wider text-fg-subtle">Check in</p>
+          <p class="mt-1 text-base font-semibold text-fg-strong">{l.checkInTime ?? '—'}</p>
+          <p class="text-xs text-fg-muted">{dateLabel(l.checkInDate)}</p>
+        </div>
+        <div class="flex flex-col items-center text-fg-subtle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <p class="mt-1 text-[11px] font-medium uppercase tracking-wider">{nights} night{nights === 1 ? '' : 's'}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-[11px] uppercase tracking-wider text-fg-subtle">Check out</p>
+          <p class="mt-1 text-base font-semibold text-fg-strong">{l.checkOutTime ?? '—'}</p>
+          <p class="text-xs text-fg-muted">{dateLabel(l.checkOutDate)}</p>
+        </div>
+      </div>
+
+      {l.address && (
+        <div class="rounded-xl border border-line bg-card-2 p-4">
+          <p class="text-[11px] uppercase tracking-wider text-fg-subtle">Address</p>
+          <p class="mt-1 text-sm text-fg">{l.address}</p>
+        </div>
+      )}
+
+      <dl class="grid gap-3 text-sm sm:grid-cols-2">
+        {l.confirmation && (
+          <div>
+            <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Confirmation</dt>
+            <dd class="font-mono text-fg-strong">{l.confirmation}</dd>
+          </div>
+        )}
+        {l.phone && (
+          <div>
+            <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Phone</dt>
+            <dd>
+              <a href={`tel:${l.phone.replace(/\s+/g, '')}`} class="font-mono text-sun-700 dark:text-sun-300 hover:underline">{l.phone}</a>
+            </dd>
+          </div>
+        )}
+        {l.website && (
+          <div class="sm:col-span-2">
+            <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Website</dt>
+            <dd>
+              <a href={l.website} target="_blank" rel="noopener" class="text-sky-700 dark:text-sky-300 underline-offset-2 hover:underline">{l.website.replace(/^https?:\/\//, '')}</a>
+            </dd>
+          </div>
+        )}
+        <div class="sm:col-span-2 flex items-center gap-2">
+          <dt class="text-[11px] uppercase tracking-wider text-fg-subtle">Status</dt>
+          <dd><StatusBadge status={l.status} /></dd>
+        </div>
+      </dl>
+
+      <div>
+        <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-fg-subtle">Guests</p>
+        <p class="text-sm text-fg">{l.guests.join(' · ')}</p>
+        <div class="mt-3">
+          <FamilyChips ids={l.families} size="md" />
+        </div>
+      </div>
+
+      {l.notes && <p class="text-xs text-fg-muted">{l.notes}</p>}
+    </div>
+
+    <footer class="flex flex-col-reverse gap-2 border-t border-line px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <button
+        type="submit"
+        value="close"
+        class="rounded-lg border border-line px-4 py-2 text-sm font-medium text-fg hover:bg-card-2"
+      >
+        Close
+      </button>
+      {mapsDirectionsUrl && (
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {mapsSearchUrl && (
+            <a
+              href={mapsSearchUrl}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center justify-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium text-fg hover:bg-card-2"
+            >
+              Open in Google Maps
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </a>
+          )}
+          <a
+            href={mapsDirectionsUrl}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center gap-2 rounded-lg bg-sun-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-sun-400"
+          >
+            Get directions
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          </a>
+        </div>
+      )}
+    </footer>
+  </form>
+</dialog>
