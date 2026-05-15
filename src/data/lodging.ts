@@ -56,6 +56,23 @@ export const lodging: Lodging[] = [
     notes: 'Eclipse-viewing base. The 8 travelers on UX 6079 land at PMI 18:25; arrival at the cottage will be ~19:30–20:00.',
   },
 
+  // Aug 9–11 · Ibiza side trip (Hykers only) ─── placeholder, not booked yet
+  {
+    id: 'lodging-ibiza',
+    name: 'Ibiza hotel (TBD)',
+    kind: 'Hotel · placeholder',
+    address: 'Ibiza, Spain',
+    mapQuery: 'Ibiza, Spain',
+    checkInDate: '2026-08-09',
+    checkInTime: '23:30',
+    checkOutDate: '2026-08-11',
+    checkOutTime: '11:00',
+    guests: ['David', 'Kit'],
+    families: ['hykers'],
+    status: 'needs-action',
+    notes: 'Two-night side trip from Mallorca. The Mallorca cottage is still booked for the Hykers across this window — pick which lodging makes sense.',
+  },
+
   // Aug 14–16 · Madrid return leg (Sorianos + Hykers)
   {
     id: 'lodging-madrid-2',

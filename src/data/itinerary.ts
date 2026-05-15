@@ -42,6 +42,20 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'lodging-madrid-1',
   },
 
+  // ─── Madrid → Salamanca train ── PLACEHOLDER, not booked yet ────────────
+  {
+    id: 'evt-train-mad-sal',
+    date: '2026-08-06',
+    startTime: '12:00',
+    endTime: '13:35',
+    type: 'transport',
+    title: 'Train: Madrid → Salamanca',
+    location: 'Madrid Chamartín → Salamanca',
+    details: 'Placeholder timing — book Renfe sailing once dates are confirmed (~1h 35m).',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'needs-action',
+  },
+
   // ─── Salamanca · Aug 6–9 (Sorianos + Hykers + Dev-Kev) ───────────────────
   {
     id: 'evt-salamanca-in',
@@ -64,6 +78,20 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers', 'dev-kev'],
     status: 'booked',
     refId: 'lodging-salamanca',
+  },
+
+  // ─── Salamanca → Madrid train ── PLACEHOLDER, not booked yet ────────────
+  {
+    id: 'evt-train-sal-mad',
+    date: '2026-08-09',
+    startTime: '13:00',
+    endTime: '14:35',
+    type: 'transport',
+    title: 'Train: Salamanca → Madrid',
+    location: 'Salamanca → Madrid Chamartín',
+    details: 'Placeholder timing — must land in Madrid in time for UX 6079 (departs 17:05).',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'needs-action',
   },
 
   // ─── Wheelocks · Atlanta → Frankfurt → Palma de Mallorca ─────────────────
@@ -107,6 +135,41 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'ux6079-out',
   },
 
+  // ─── Mallorca rental cars · pickup ── PLACEHOLDER ───────────────────────
+  {
+    id: 'evt-car-wheelocks-pickup',
+    date: '2026-08-09',
+    startTime: '12:00',
+    type: 'car-rental',
+    title: 'Wheelocks: pick up rental SUV',
+    location: 'PMI airport',
+    details: 'Looking for a large SUV with 3 rows. Book a few months out — eclipse week will be in high demand.',
+    families: ['wheelocks'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-sorianos-pickup',
+    date: '2026-08-09',
+    startTime: '19:00',
+    type: 'car-rental',
+    title: 'Sorianos: pick up rental car',
+    location: 'PMI airport',
+    details: 'Group car for Sorianos + everyone else without their own ride (Hykers, Gemma, Vani). Size accordingly.',
+    families: ['sorianos'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-devkev-own',
+    date: '2026-08-09',
+    startTime: '19:00',
+    type: 'car-rental',
+    title: 'Dev-Kev: own car arrangement',
+    location: 'Mallorca',
+    details: 'Devon and Kevin will sort their own rental separately.',
+    families: ['dev-kev'],
+    status: 'needs-action',
+  },
+
   // ─── Mallorca · Aug 9–14 (everyone) ──────────────────────────────────────
   {
     id: 'evt-mallorca-in',
@@ -118,6 +181,57 @@ export const itinerary: ItineraryEvent[] = [
     families: [], // everyone
     status: 'booked',
     refId: 'lodging-mallorca',
+  },
+
+  // ─── Hykers · Mallorca → Ibiza side trip ── PLACEHOLDER ─────────────────
+  {
+    id: 'evt-ferry-pmi-iza',
+    date: '2026-08-09',
+    startTime: '21:00',
+    endDate: '2026-08-10',
+    endTime: '00:30',
+    type: 'ferry',
+    title: 'Ferry: Mallorca → Ibiza',
+    location: 'Palma → Eivissa',
+    details: 'Placeholder timing — pick a Baleària or Trasmediterránea sailing.',
+    families: ['hykers'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-ibiza-in',
+    date: '2026-08-09',
+    startTime: '23:30',
+    type: 'lodging-checkin',
+    title: 'Check in: Ibiza hotel',
+    location: 'Ibiza',
+    families: ['hykers'],
+    status: 'needs-action',
+    refId: 'lodging-ibiza',
+  },
+
+  // ─── Hykers · Ibiza → Mallorca return ── PLACEHOLDER ────────────────────
+  {
+    id: 'evt-ibiza-out',
+    date: '2026-08-11',
+    startTime: '11:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Ibiza hotel',
+    location: 'Ibiza',
+    families: ['hykers'],
+    status: 'needs-action',
+    refId: 'lodging-ibiza',
+  },
+  {
+    id: 'evt-ferry-iza-pmi',
+    date: '2026-08-11',
+    startTime: '14:00',
+    endTime: '17:30',
+    type: 'ferry',
+    title: 'Ferry: Ibiza → Mallorca',
+    location: 'Eivissa → Palma',
+    details: 'Placeholder timing — pick a return sailing that lands well before the eclipse on Aug 12.',
+    families: ['hykers'],
+    status: 'needs-action',
   },
 
   // ─── Eclipse Day ─────────────────────────────────────────────────────────
@@ -132,6 +246,38 @@ export const itinerary: ItineraryEvent[] = [
     details: 'See the Eclipse Day page for the full plan, timing, and safety checklist.',
     families: [],
     status: 'confirmed',
+  },
+
+  // ─── Mallorca rental cars · drop-off ── PLACEHOLDER ─────────────────────
+  {
+    id: 'evt-car-wheelocks-dropoff',
+    date: '2026-08-14',
+    startTime: '14:00',
+    type: 'car-rental',
+    title: 'Wheelocks: return rental SUV',
+    location: 'PMI airport',
+    families: ['wheelocks'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-sorianos-dropoff',
+    date: '2026-08-14',
+    startTime: '15:00',
+    type: 'car-rental',
+    title: 'Sorianos: return rental car',
+    location: 'PMI airport',
+    families: ['sorianos'],
+    status: 'needs-action',
+  },
+  {
+    id: 'evt-car-devkev-dropoff',
+    date: '2026-08-14',
+    startTime: '15:00',
+    type: 'car-rental',
+    title: 'Dev-Kev: return own rental',
+    location: 'Mallorca',
+    families: ['dev-kev'],
+    status: 'needs-action',
   },
 
   // ─── Mallorca → Madrid (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────

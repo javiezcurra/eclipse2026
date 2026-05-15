@@ -15,6 +15,8 @@ export type EventType =
   | 'lodging-checkin'
   | 'lodging-checkout'
   | 'transport'
+  | 'ferry'
+  | 'car-rental'
   | 'activity'
   | 'meal'
   | 'eclipse'
