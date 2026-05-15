@@ -95,6 +95,11 @@ export interface Lodging {
   notes?: string;
 }
 
+export interface PrepLink {
+  label: string;
+  url: string;
+}
+
 export interface PrepItem {
   id: string;
   title: string;
@@ -104,6 +109,13 @@ export interface PrepItem {
   appliesTo: FamilyId[];
   /** Soft deadline relative to trip start, e.g. "2 months before" */
   deadline?: string;
+  /** Optional external links rendered as chip buttons below the description. */
+  links?: PrepLink[];
+  /** Optional in-page action triggered by clicking a button on the item.
+   *  Currently only 'open-install-modal' is supported. */
+  action?: 'open-install-modal';
+  /** Label for the action button; required when `action` is set. */
+  actionLabel?: string;
 }
 
 export interface Contact {
