@@ -1,0 +1,54 @@
+---
+// Manual refresh button — fallback for when the auto-update flow doesn't
+// land a fresh build on the user's PWA. Calling it triggers a service
+// worker update check, then reloads. Combined with NetworkFirst HTML
+// (see astro.config.mjs), one click guarantees fresh content.
+---
+
+<button
+  id="refresh-app"
+  type="button"
+  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line text-fg-muted hover:bg-card-2 hover:text-fg-strong"
+  aria-label="Refresh page"
+  title="Refresh"
+>
+  <svg id="refresh-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 4 23 10 17 10"></polyline>
+    <polyline points="1 20 1 14 7 14"></polyline>
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+  </svg>
+</button>
+
+<script>
+  const btn = document.getElementById('refresh-app');
+  const icon = document.getElementById('refresh-icon');
+
+  btn?.addEventListener('click', async () => {
+    icon?.classList.add('refresh-spin');
+    btn.setAttribute('disabled', 'true');
+
+    // Best-effort: nudge the service worker to check for a new build before
+    // we reload, so the reload picks up the freshest precache too. With
+    // NetworkFirst HTML, the reload itself will fetch fresh page content
+    // even without this — this just helps the static-asset cache catch up.
+    try {
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        await reg?.update();
+      }
+    } catch (_) {}
+
+    window.location.reload();
+  });
+</script>
+
+<style>
+  .refresh-spin {
+    animation: refresh-spin 700ms linear infinite;
+    transform-origin: 50% 50%;
+  }
+  @keyframes refresh-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+</style>
