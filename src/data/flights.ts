@@ -218,7 +218,7 @@ export const flights: Flight[] = [
     notes: 'Placeholder — flight details TBD. Likely overnight via a European hub.',
   },
 
-  // ─── Dev-Kev · ATL ↔ Spain ── PLACEHOLDER, no flights booked yet ────────
+  // ─── Dev-Kev · GSP ↔ Spain ── PLACEHOLDER, no flights booked yet ────────
   {
     id: 'dev-kev-out',
     airline: 'TBD',
@@ -227,14 +227,14 @@ export const flights: Flight[] = [
     families: ['dev-kev'],
     departDate: '2026-07-30',
     departTime: 'TBD',
-    departAirport: 'ATL',
-    departAirportName: 'Atlanta',
+    departAirport: 'GSP',
+    departAirportName: 'Greenville–Spartanburg',
     arriveDate: '2026-07-31',
     arriveTime: 'TBD',
     arriveAirport: 'BCN',
     arriveAirportName: 'Barcelona–El Prat',
     status: 'needs-action',
-    notes: 'Placeholder — flight details TBD. Likely overnight transatlantic; expect at least one connection.',
+    notes: 'Placeholder — flight details TBD. GSP has no transatlantic service, so expect at least one US-side connection (CLT, ATL, JFK, etc.) plus a possible European hub before BCN.',
   },
   {
     id: 'dev-kev-ret',
@@ -248,10 +248,10 @@ export const flights: Flight[] = [
     departAirportName: 'Madrid–Barajas',
     arriveDate: '2026-08-15',
     arriveTime: 'TBD',
-    arriveAirport: 'ATL',
-    arriveAirportName: 'Atlanta',
+    arriveAirport: 'GSP',
+    arriveAirportName: 'Greenville–Spartanburg',
     status: 'needs-action',
-    notes: 'Placeholder — flight details TBD.',
+    notes: 'Placeholder — flight details TBD. Likely a European hub + a US connection back to GSP.',
   },
 
   // Return: Madrid → Atlanta (Sorianos + Hykers)
