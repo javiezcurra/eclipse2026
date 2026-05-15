@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night-950: #0b1220;
+  --color-night-900: #111a2e;
+  --color-night-800: #1a2540;
+  --color-night-700: #243254;
+  --color-sun-500: #f59e0b;
+  --color-sun-400: #fbbf24;
+  --color-corona-300: #fde68a;
+  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-night-950);
+  color: #e2e8f0;
+}
+
+body {
+  font-family: var(--font-display);
+  min-height: 100vh;
+}
+
+/* Print: make the itinerary printable as a fallback when offline */
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+}

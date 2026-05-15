@@ -1,0 +1,22 @@
+---
+import type { EventType } from '../data/types';
+
+interface Props {
+  type: EventType;
+}
+const { type } = Astro.props;
+
+const icons: Record<EventType, string> = {
+  flight: '✈️',
+  'lodging-checkin': '🏨',
+  'lodging-checkout': '🧳',
+  transport: '🚆',
+  activity: '🗺️',
+  meal: '🍽️',
+  eclipse: '🌑',
+  'free-time': '☕',
+  note: '📝',
+};
+---
+
+<span aria-hidden="true" class="text-base leading-none">{icons[type]}</span>

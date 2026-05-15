@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import HappeningNow from '../components/HappeningNow.astro';
+import { trip } from '../data/trip';
+import { families } from '../data/families';
+import { familyColorClasses } from '../data/families';
+import { url } from '../lib/url';
+const eclipseDateLabel = new Date(trip.eclipseDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+const cards = [
+  { href: 'itinerary', title: 'Itinerary', desc: 'Day-by-day timeline with filters and jump-to-date.', accent: 'from-sun-400 to-sun-500' },
+  { href: 'eclipse', title: 'Eclipse Day', desc: 'Timing, viewing site, safety, and the totality plan.', accent: 'from-corona-300 to-sun-400' },
+  { href: 'prep', title: 'Prep', desc: 'Passports, eclipse glasses, mobile data, adapters.', accent: 'from-sky-400 to-cyan-500' },
+  { href: 'flights-lodging', title: 'Flights & Lodging', desc: 'Quick-reference for every booking.', accent: 'from-emerald-400 to-emerald-500' },
+  { href: 'contacts', title: 'Contacts', desc: 'Embassy, emergency numbers, key phone numbers.', accent: 'from-rose-400 to-rose-500' },
+];
+---
+
+<Base title="Home">
+  <header class="mb-8 text-center sm:text-left">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-400">{eclipseDateLabel}</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-100 sm:text-4xl">{trip.name}</h1>
+    <p class="mt-2 max-w-2xl text-slate-300">{trip.tagline}</p>
+  </header>
+
+  <div class="mb-8">
+    <HappeningNow />
+  </div>
+
+  <section class="mb-10">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Travelers</h2>
+    <ul class="flex flex-wrap gap-2">
+      {families.map((f) => {
+        const c = familyColorClasses[f.color];
+        return (
+          <li class:list={['inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium', c.bgSoft, c.text, c.border]}>
+            <span class:list={['h-2 w-2 rounded-full', c.dot]}></span>
+            {f.name}
+            <span class="text-xs opacity-70">· {f.members.length}</span>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">Sections</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {cards.map((card) => (
+        <a href={url(card.href)} class="group rounded-2xl border border-night-800 bg-night-900/60 p-4 transition-colors hover:border-slate-500 hover:bg-night-900">
+          <div class:list={['mb-3 inline-block h-1.5 w-10 rounded-full bg-gradient-to-r', card.accent]}></div>
+          <h3 class="text-base font-semibold text-slate-100 group-hover:text-white">{card.title}</h3>
+          <p class="mt-1 text-sm text-slate-400">{card.desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

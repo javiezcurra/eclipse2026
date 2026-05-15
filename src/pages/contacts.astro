@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import { contacts } from '../data/contacts';
+import type { Contact } from '../data/types';
+
+const categoryLabel: Record<Contact['category'], string> = {
+  emergency: 'Emergency',
+  embassy: 'Embassy & consulate',
+  medical: 'Medical',
+  lodging: 'Lodging',
+  transport: 'Transport',
+  other: 'Other',
+};
+const order: Contact['category'][] = ['emergency', 'embassy', 'medical', 'lodging', 'transport', 'other'];
+
+const groups = new Map<Contact['category'], Contact[]>();
+for (const c of contacts) {
+  const list = groups.get(c.category) ?? [];
+  list.push(c);
+  groups.set(c.category, list);
+}
+---
+
+<Base title="Contacts">
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">Emergency contacts</h1>
+    <p class="mt-1 text-sm text-slate-400">Tap a number to call. Save the embassy contact in your phone before you leave.</p>
+  </header>
+
+  <div class="space-y-6">
+    {order.map((cat) => {
+      const items = groups.get(cat);
+      if (!items?.length) return null;
+      return (
+        <section>
+          <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">{categoryLabel[cat]}</h2>
+          <ul class="space-y-2">
+            {items.map((c) => (
+              <li class="rounded-xl border border-night-800 bg-night-900/60 p-4">
+                <p class="text-sm font-semibold text-slate-100">{c.label}</p>
+                {c.phone && (
+                  <p class="mt-1 text-base">
+                    <a href={`tel:${c.phone.replace(/\s+/g, '')}`} class="font-mono text-sun-300 hover:text-sun-200">{c.phone}</a>
+                  </p>
+                )}
+                {c.address && <p class="mt-1 text-sm text-slate-300">{c.address}</p>}
+                {c.website && (
+                  <p class="mt-1 text-xs">
+                    <a href={c.website} target="_blank" rel="noopener" class="text-sky-300 underline-offset-2 hover:underline">{c.website}</a>
+                  </p>
+                )}
+                {c.notes && <p class="mt-2 text-xs text-slate-400">{c.notes}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })}
+  </div>
+</Base>

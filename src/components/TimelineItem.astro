@@ -1,0 +1,60 @@
+---
+import type { ItineraryEvent } from '../data/types';
+import { familyById, familyColorClasses } from '../data/families';
+import EventTypeIcon from './EventTypeIcon.astro';
+import FamilyChips from './FamilyChips.astro';
+import StatusBadge from './StatusBadge.astro';
+
+interface Props {
+  event: ItineraryEvent;
+}
+const { event } = Astro.props;
+
+// Color the timeline dot by the first family, or neutral if everyone.
+const accentColor = event.families[0] ? familyById(event.families[0])?.color : undefined;
+const accent = accentColor ? familyColorClasses[accentColor] : null;
+
+const timeLabel = event.startTime
+  ? event.endTime ? `${event.startTime}–${event.endTime}` : event.startTime
+  : 'All day';
+
+const mapUrl = event.mapQuery
+  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.mapQuery)}`
+  : event.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}` : null;
+---
+
+<article
+  class="timeline-item relative flex gap-3 sm:gap-4"
+  data-families={event.families.join(',')}
+  data-everyone={event.families.length === 0 ? 'true' : 'false'}
+  data-date={event.date}
+  id={`event-${event.id}`}
+>
+  <div class="flex w-16 shrink-0 flex-col items-end pt-1 text-right">
+    <div class="text-xs font-medium text-slate-400">{timeLabel}</div>
+  </div>
+  <div class="relative flex flex-col items-center">
+    <span class:list={['h-3 w-3 rounded-full ring-4 ring-night-950', accent ? accent.dot : 'bg-slate-500']}></span>
+    <span class="mt-1 w-px flex-1 bg-night-800"></span>
+  </div>
+  <div class="flex-1 pb-6">
+    <div class="rounded-xl border border-night-800 bg-night-900/70 p-3 sm:p-4">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex items-start gap-2">
+          <EventTypeIcon type={event.type} />
+          <h3 class="text-sm font-semibold text-slate-100 sm:text-base">{event.title}</h3>
+        </div>
+        <StatusBadge status={event.status} />
+      </div>
+      {event.location && (
+        <p class="mt-1 text-xs text-slate-400">
+          {mapUrl ? <a href={mapUrl} target="_blank" rel="noopener" class="underline-offset-2 hover:underline">{event.location}</a> : event.location}
+        </p>
+      )}
+      {event.details && <p class="mt-2 text-sm text-slate-300">{event.details}</p>}
+      <div class="mt-3">
+        <FamilyChips ids={event.families} />
+      </div>
+    </div>
+  </div>
+</article>

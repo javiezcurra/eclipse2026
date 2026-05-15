@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import TimelineItem from '../components/TimelineItem.astro';
+import { sortedItinerary, itineraryDates } from '../data/itinerary';
+import { families, familyColorClasses } from '../data/families';
+
+const events = sortedItinerary();
+const dates = itineraryDates();
+
+function dateLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+function dateShortLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+// Group events by date for rendering
+const eventsByDate = new Map<string, typeof events>();
+for (const e of events) {
+  const list = eventsByDate.get(e.date) ?? [];
+  list.push(e);
+  eventsByDate.set(e.date, list);
+}
+---
+
+<Base title="Itinerary">
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">Itinerary</h1>
+    <p class="mt-1 text-sm text-slate-400">Filter by family, or jump to a specific day.</p>
+  </header>
+
+  <!-- Family filters -->
+  <section class="mb-4 rounded-xl border border-night-800 bg-night-900/60 p-3">
+    <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Filter by family</p>
+    <div id="family-filter" class="flex flex-wrap gap-2" data-active="all">
+      <button type="button" data-family="all" class="filter-chip filter-chip-active rounded-full border border-slate-500 bg-slate-700/60 px-3 py-1 text-xs font-medium text-slate-100">All</button>
+      {families.map((f) => {
+        const c = familyColorClasses[f.color];
+        return (
+          <button
+            type="button"
+            data-family={f.id}
+            class:list={['filter-chip rounded-full border px-3 py-1 text-xs font-medium', c.bgSoft, c.text, c.border]}
+          >
+            <span class:list={['mr-1 inline-block h-1.5 w-1.5 rounded-full align-middle', c.dot]}></span>
+            {f.name}
+          </button>
+        );
+      })}
+    </div>
+    <p class="mt-2 text-[11px] text-slate-500">Showing events for the selected family plus all "everyone" events.</p>
+  </section>
+
+  <!-- Jump-to-date pills -->
+  <section class="mb-6 -mx-1 overflow-x-auto">
+    <div class="flex gap-2 px-1 pb-2">
+      {dates.map((d) => (
+        <a href={`#day-${d}`} class="shrink-0 rounded-full border border-night-700 bg-night-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-slate-400 hover:text-slate-100">
+          {dateShortLabel(d)}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <div class="space-y-8">
+    {dates.map((d) => (
+      <section id={`day-${d}`} class="scroll-mt-20 day-section" data-date={d}>
+        <header class="mb-4 flex items-baseline justify-between border-b border-night-800 pb-2">
+          <h2 class="text-lg font-semibold text-slate-100">{dateLabel(d)}</h2>
+          <span class="text-xs text-slate-500">{d}</span>
+        </header>
+        <div class="space-y-0">
+          {eventsByDate.get(d)?.map((e) => <TimelineItem event={e} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <p id="empty-state" class="hidden rounded-xl border border-dashed border-night-700 p-6 text-center text-sm text-slate-400">
+    No events match this filter.
+  </p>
+</Base>
+
+<script>
+  const container = document.getElementById('family-filter');
+  const chips = container ? Array.from(container.querySelectorAll<HTMLButtonElement>('.filter-chip')) : [];
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.timeline-item'));
+  const daySections = Array.from(document.querySelectorAll<HTMLElement>('.day-section'));
+  const empty = document.getElementById('empty-state');
+
+  function applyFilter(family: string) {
+    let visibleCount = 0;
+    for (const el of items) {
+      const everyone = el.dataset.everyone === 'true';
+      const fams = (el.dataset.families || '').split(',').filter(Boolean);
+      const show = family === 'all' || everyone || fams.includes(family);
+      el.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    }
+    // Hide day sections that now have no visible events.
+    for (const section of daySections) {
+      const anyVisible = section.querySelectorAll('.timeline-item:not(.hidden)').length > 0;
+      section.classList.toggle('hidden', !anyVisible);
+    }
+    empty?.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      const family = chip.dataset.family || 'all';
+      for (const c of chips) {
+        c.classList.remove('filter-chip-active', 'ring-2');
+      }
+      chip.classList.add('filter-chip-active', 'ring-2');
+      container?.setAttribute('data-active', family);
+      applyFilter(family);
+    });
+  }
+
+  // Default: All selected, no filter applied.
+</script>
+
+<style>
+  .filter-chip-active { box-shadow: 0 0 0 2px rgba(148,163,184,0.4); }
+</style>

@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import { flights } from '../data/flights';
+import { lodging } from '../data/lodging';
+import FamilyChips from '../components/FamilyChips.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+
+function dateLabel(d: string): string {
+  return new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+const sortedFlights = [...flights].sort((a, b) =>
+  `${a.departDate}T${a.departTime}`.localeCompare(`${b.departDate}T${b.departTime}`),
+);
+const sortedLodging = [...lodging].sort((a, b) => a.checkInDate.localeCompare(b.checkInDate));
+---
+
+<Base title="Flights & Lodging">
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">Flights & Lodging</h1>
+    <p class="mt-1 text-sm text-slate-400">Quick reference for every booking.</p>
+  </header>
+
+  <section class="mb-10">
+    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-400">✈️ Flights</h2>
+    {sortedFlights.length === 0 ? (
+      <p class="text-sm text-slate-400">No flights added yet.</p>
+    ) : (
+      <ul class="space-y-3">
+        {sortedFlights.map((f) => (
+          <li class="rounded-xl border border-night-800 bg-night-900/60 p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-100">{f.airline} {f.flightNumber}</p>
+                <p class="text-xs text-slate-400">{f.confirmation ? `Confirmation: ${f.confirmation}` : 'No confirmation # yet'}</p>
+              </div>
+              <StatusBadge status={f.status} />
+            </div>
+            <div class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-slate-500">Depart</p>
+                <p class="font-medium text-slate-200">{f.departAirport} — {f.departAirportName}</p>
+                <p class="text-slate-400">{dateLabel(f.departDate)} · {f.departTime}</p>
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wider text-slate-500">Arrive</p>
+                <p class="font-medium text-slate-200">{f.arriveAirport} — {f.arriveAirportName}</p>
+                <p class="text-slate-400">{dateLabel(f.arriveDate)} · {f.arriveTime}</p>
+              </div>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-2">
+              <FamilyChips ids={f.families} />
+              {f.travelers.length > 0 && (
+                <span class="text-xs text-slate-400">· {f.travelers.join(', ')}</span>
+              )}
+            </div>
+            {f.notes && <p class="mt-2 text-xs text-slate-400">{f.notes}</p>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+
+  <section>
+    <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-400">🏨 Lodging</h2>
+    {sortedLodging.length === 0 ? (
+      <p class="text-sm text-slate-400">No lodging added yet.</p>
+    ) : (
+      <ul class="space-y-3">
+        {sortedLodging.map((l) => {
+          const mapUrl = l.mapQuery || l.address
+            ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.mapQuery || l.address || '')}`
+            : null;
+          return (
+            <li class="rounded-xl border border-night-800 bg-night-900/60 p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-semibold text-slate-100">{l.name}</p>
+                  <p class="text-xs text-slate-400">{l.kind}{l.confirmation ? ` · ${l.confirmation}` : ''}</p>
+                </div>
+                <StatusBadge status={l.status} />
+              </div>
+              {l.address && (
+                <p class="mt-2 text-sm text-slate-300">
+                  {mapUrl ? <a href={mapUrl} target="_blank" rel="noopener" class="underline-offset-2 hover:underline">{l.address}</a> : l.address}
+                </p>
+              )}
+              <div class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <p class="text-[11px] uppercase tracking-wider text-slate-500">Check in</p>
+                  <p class="text-slate-200">{dateLabel(l.checkInDate)}{l.checkInTime ? ` · ${l.checkInTime}` : ''}</p>
+                </div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-wider text-slate-500">Check out</p>
+                  <p class="text-slate-200">{dateLabel(l.checkOutDate)}{l.checkOutTime ? ` · ${l.checkOutTime}` : ''}</p>
+                </div>
+              </div>
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                <FamilyChips ids={l.families} />
+                {l.guests.length > 0 && (
+                  <span class="text-xs text-slate-400">· {l.guests.join(', ')}</span>
+                )}
+              </div>
+              {l.notes && <p class="mt-2 text-xs text-slate-400">{l.notes}</p>}
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+</Base>
