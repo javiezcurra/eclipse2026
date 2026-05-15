@@ -56,14 +56,14 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'lodging-madrid-1',
   },
 
-  // ─── Dev-Kev · Madrid → Barcelona train ── PLACEHOLDER ──────────────────
+  // ─── Dev-Kev · Barcelona → Madrid train ── PLACEHOLDER ──────────────────
   {
-    id: 'evt-train-dev-kev-mad-bcn',
+    id: 'evt-train-dev-kev-bcn-mad',
     date: '2026-08-03',
     startTime: 'TBD',
     type: 'transport',
-    title: 'Dev-Kev: Train Madrid → Barcelona',
-    location: 'Madrid → Barcelona · placeholder',
+    title: 'Dev-Kev: Train Barcelona → Madrid',
+    location: 'Barcelona → Madrid · placeholder',
     families: ['dev-kev'],
     status: 'needs-action',
   },
