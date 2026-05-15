@@ -1,16 +1,17 @@
 export const eclipse = {
   date: '2026-08-12',
-  /** Approximate Spain local time (CEST) for the Mallorca area.
-   *  These are placeholder estimates — confirm precisely from a calculator
-   *  (xjubier.free.fr or NASA) once a viewing site is locked in. */
-  c1: '19:32',      // partial begins
-  c2: '20:27:30',   // totality begins
-  max: '20:28:20',  // greatest eclipse
-  c3: '20:29:10',   // totality ends
-  c4: '21:20',      // partial ends
-  durationOfTotality: '~1m 40s',
-  /** Sun altitude at greatest eclipse — very low, this is essentially a sunset eclipse. */
-  sunAltitude: '~3° above the western horizon',
+  /** Spain local time (CEST) — values from timeanddate.com for Palma de Mallorca.
+   *  Accurate to within a few seconds for Palma; will vary by a few seconds
+   *  across the island (Inca / Pollença / Alcúdia etc.). */
+  c1: '19:38:03',   // partial begins
+  c2: '20:31:05',   // totality begins
+  max: '20:31:53',  // greatest eclipse
+  c3: '20:32:41',   // totality ends
+  sunset: '20:49:22',
+  c4: '21:22:33',   // partial ends (sun below horizon by this point)
+  durationOfTotality: '1m 36s',
+  /** Sun altitude at greatest eclipse — very low, this is a sunset eclipse. */
+  sunAltitude: '2.8° above the WNW horizon (287°)',
 
   /** Eclipse glasses — already procured by Javi for the whole group. */
   glasses: {
@@ -21,7 +22,7 @@ export const eclipse = {
 
   viewingSite: {
     summary: 'Three options under consideration · final pick TBD.',
-    notes: 'The eclipse happens late afternoon with the sun very low to the west, so any site we choose needs a clear western horizon. Cloud cover on Mallorca can be local — we should be ready to relocate the morning of.',
+    notes: 'Totality happens with the sun only ~2.8° above the horizon, bearing roughly WNW (287°). Whichever site we pick needs an unobstructed view in that direction — sea, hilltop, or open plain. Cloud cover on Mallorca can be local, so be ready to relocate the morning of.',
   },
 
   /** Candidate viewing sites; mark `chosen: true` on whichever we pick. */

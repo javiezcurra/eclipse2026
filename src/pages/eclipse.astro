@@ -5,12 +5,15 @@ import { trip } from '../data/trip';
 
 const dateLabel = new Date(trip.eclipseDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
+const sunsetShort = eclipse.sunset.split(':').slice(0, 2).join(':');
+
 const timeline = [
   { label: 'First contact (partial begins)', time: eclipse.c1 },
   { label: 'Totality begins (C2)', time: eclipse.c2, highlight: true },
   { label: 'Maximum eclipse', time: eclipse.max, highlight: true },
   { label: 'Totality ends (C3)', time: eclipse.c3, highlight: true },
-  { label: 'Fourth contact (partial ends)', time: eclipse.c4 },
+  { label: 'Sunset', time: eclipse.sunset },
+  { label: 'Fourth contact (partial ends, sun below horizon)', time: eclipse.c4 },
 ];
 
 function mapsSearchUrl(query: string): string {
@@ -24,7 +27,7 @@ function mapsSearchUrl(query: string): string {
     <div class="relative">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sun-500 dark:text-sun-400">{dateLabel}</p>
       <h1 class="mt-2 text-3xl font-bold tracking-tight text-fg-strong sm:text-4xl">Total Solar Eclipse · Mallorca</h1>
-      <p class="mt-2 max-w-2xl text-fg-muted">Totality of {eclipse.durationOfTotality}. Sun altitude at max: {eclipse.sunAltitude}. This is essentially a sunset eclipse — viewing site needs a clear western horizon.</p>
+      <p class="mt-2 max-w-2xl text-fg-muted">Totality of {eclipse.durationOfTotality} · sun altitude at max: {eclipse.sunAltitude}. Sunset is at {sunsetShort} (just 17 min after C3), so the tail end of the partial phase happens below the horizon.</p>
     </div>
   </header>
 
@@ -40,7 +43,7 @@ function mapsSearchUrl(query: string): string {
   <section class="mb-8 rounded-2xl border border-line bg-card p-5">
     <div class="mb-4 flex items-baseline justify-between gap-3">
       <h2 class="text-sm font-semibold uppercase tracking-wider text-fg-muted">Timing (Spain local · CEST)</h2>
-      <span class="text-[11px] text-fg-subtle">Approximate · confirm for chosen site</span>
+      <span class="text-[11px] text-fg-subtle">Palma · source: timeanddate.com</span>
     </div>
     <ol class="space-y-2">
       {timeline.map((t) => (
