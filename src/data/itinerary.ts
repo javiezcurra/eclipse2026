@@ -1,7 +1,7 @@
 import type { ItineraryEvent } from './types';
 
 // `families: []` means everyone; otherwise list the family ids that participate.
-// `refId` on flight events points to a Flight in flights.ts so the modal can show full details.
+// `refId` on flight/lodging events points to a Flight or Lodging entry for full details.
 export const itinerary: ItineraryEvent[] = [
   // ─── Atlanta → Madrid (Sorianos + Hykers) ────────────────────────────────
   {
@@ -18,27 +18,52 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'dl108-out',
   },
 
-  // ─── Madrid week ─────────────────────────────────────────────────────────
+  // ─── Madrid leg 1 · Aug 3–6 (Sorianos + Hykers) ──────────────────────────
   {
-    id: 'evt-madrid-checkin',
+    id: 'evt-madrid-1-in',
     date: '2026-08-03',
     startTime: '15:00',
     type: 'lodging-checkin',
-    title: 'Check in: Madrid lodging (TBD)',
-    location: 'Madrid',
+    title: 'Check in: Apartment in Madrid',
+    location: 'Calle de Zaragoza, 11, Madrid',
     families: ['sorianos', 'hykers'],
-    status: 'tentative',
-    refId: 'lodging-madrid',
+    status: 'booked',
+    refId: 'lodging-madrid-1',
   },
   {
-    id: 'evt-madrid-tapas-walk',
-    date: '2026-08-07',
-    startTime: '19:00',
-    type: 'activity',
-    title: 'Tapas walk in La Latina (placeholder)',
-    location: 'La Latina, Madrid',
-    families: [],
-    status: 'tentative',
+    id: 'evt-madrid-1-out',
+    date: '2026-08-06',
+    startTime: '11:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Apartment in Madrid',
+    location: 'Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-1',
+  },
+
+  // ─── Salamanca · Aug 6–9 (Sorianos + Hykers + Dev-Kev) ───────────────────
+  {
+    id: 'evt-salamanca-in',
+    date: '2026-08-06',
+    startTime: '16:00',
+    type: 'lodging-checkin',
+    title: 'Check in: Castillo del Buen Amor',
+    location: 'Topas, Salamanca',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'booked',
+    refId: 'lodging-salamanca',
+  },
+  {
+    id: 'evt-salamanca-out',
+    date: '2026-08-09',
+    startTime: '12:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Castillo del Buen Amor',
+    location: 'Topas, Salamanca',
+    families: ['sorianos', 'hykers', 'dev-kev'],
+    status: 'booked',
+    refId: 'lodging-salamanca',
   },
 
   // ─── Madrid → Mallorca (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────
@@ -54,15 +79,17 @@ export const itinerary: ItineraryEvent[] = [
     status: 'booked',
     refId: 'ux6079-out',
   },
+
+  // ─── Mallorca · Aug 9–14 (everyone) ──────────────────────────────────────
   {
-    id: 'evt-mallorca-checkin',
+    id: 'evt-mallorca-in',
     date: '2026-08-09',
-    startTime: '20:00',
+    startTime: '17:00',
     type: 'lodging-checkin',
-    title: 'Check in: Mallorca lodging (TBD)',
-    location: 'Palma de Mallorca',
-    families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
-    status: 'tentative',
+    title: 'Check in: Cottage in the Balearic Islands',
+    location: 'Polígono 7, parcela 332, Mallorca',
+    families: [], // everyone
+    status: 'booked',
     refId: 'lodging-mallorca',
   },
 
@@ -74,22 +101,22 @@ export const itinerary: ItineraryEvent[] = [
     endTime: '21:20',
     type: 'eclipse',
     title: '🌑 TOTALITY — Eclipse viewing',
-    location: 'Mallorca area (viewing site TBD)',
-    details: 'Totality crosses near Mallorca just before sunset. See the Eclipse Day page for the full plan, backup sites, and weather.',
+    location: 'Mallorca (viewing site TBD)',
+    details: 'See the Eclipse Day page for the full plan, backup sites, and weather.',
     families: [],
     status: 'confirmed',
   },
 
   // ─── Mallorca → Madrid (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────
   {
-    id: 'evt-mallorca-checkout',
+    id: 'evt-mallorca-out',
     date: '2026-08-14',
     startTime: '11:00',
     type: 'lodging-checkout',
-    title: 'Check out: Mallorca lodging',
-    location: 'Palma de Mallorca',
-    families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
-    status: 'tentative',
+    title: 'Check out: Mallorca cottage',
+    location: 'Polígono 7, parcela 332, Mallorca',
+    families: [],
+    status: 'booked',
     refId: 'lodging-mallorca',
   },
   {
@@ -103,6 +130,30 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
     status: 'booked',
     refId: 'ux6066-ret',
+  },
+
+  // ─── Madrid leg 2 · Aug 14–16 (Sorianos + Hykers) ────────────────────────
+  {
+    id: 'evt-madrid-2-in',
+    date: '2026-08-14',
+    startTime: '19:00',
+    type: 'lodging-checkin',
+    title: 'Check in: Apartment in Madrid (return leg)',
+    location: 'Calle de Bocángel, 4, Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-2',
+  },
+  {
+    id: 'evt-madrid-2-out',
+    date: '2026-08-16',
+    startTime: '08:00',
+    type: 'lodging-checkout',
+    title: 'Check out: Apartment in Madrid',
+    location: 'Madrid',
+    families: ['sorianos', 'hykers'],
+    status: 'booked',
+    refId: 'lodging-madrid-2',
   },
 
   // ─── Madrid → Atlanta (Sorianos + Hykers) ────────────────────────────────
