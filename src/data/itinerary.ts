@@ -66,6 +66,33 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'lodging-salamanca',
   },
 
+  // ─── Wheelocks · Atlanta → Frankfurt → Palma de Mallorca ─────────────────
+  {
+    id: 'evt-ua8830-out',
+    date: '2026-08-08',
+    endDate: '2026-08-09',
+    startTime: '15:55',
+    endTime: '06:35',
+    type: 'flight',
+    title: 'Atlanta → Frankfurt (UA 8830)',
+    location: 'ATL → FRA · overnight',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8830-out',
+  },
+  {
+    id: 'evt-ua8999-out',
+    date: '2026-08-09',
+    startTime: '09:00',
+    endTime: '11:10',
+    type: 'flight',
+    title: 'Frankfurt → Palma de Mallorca (UA 8999)',
+    location: 'FRA → PMI',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8999-out',
+  },
+
   // ─── Madrid → Mallorca (Sorianos + Hykers + Dev-Kev + Gemma) ─────────────
   {
     id: 'evt-ux6079-out',
@@ -130,6 +157,32 @@ export const itinerary: ItineraryEvent[] = [
     families: ['sorianos', 'hykers', 'dev-kev', 'gemma'],
     status: 'booked',
     refId: 'ux6066-ret',
+  },
+
+  // ─── Wheelocks · Palma de Mallorca → Frankfurt → Atlanta ─────────────────
+  {
+    id: 'evt-ua8967-ret',
+    date: '2026-08-14',
+    startTime: '16:05',
+    endTime: '18:30',
+    type: 'flight',
+    title: 'Palma de Mallorca → Frankfurt (UA 8967)',
+    location: 'PMI → FRA · overnight layover',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8967-ret',
+  },
+  {
+    id: 'evt-ua8831-ret',
+    date: '2026-08-15',
+    startTime: '10:10',
+    endTime: '13:45',
+    type: 'flight',
+    title: 'Frankfurt → Atlanta (UA 8831)',
+    location: 'FRA → ATL',
+    families: ['wheelocks'],
+    status: 'booked',
+    refId: 'ua8831-ret',
   },
 
   // ─── Madrid leg 2 · Aug 14–16 (Sorianos + Hykers) ────────────────────────
