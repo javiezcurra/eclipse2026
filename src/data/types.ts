@@ -47,6 +47,14 @@ export interface Flight {
   id: string;
   airline: string;
   flightNumber: string;
+  /** e.g. "Boeing 737-800", "Airbus A330-900neo" */
+  aircraft?: string;
+  /** Operating carrier if different from the marketing airline. */
+  operatedBy?: string;
+  /** Fare description e.g. "Standard · Economy P" */
+  fareClass?: string;
+  /** Total flight time e.g. "1h 20m" */
+  duration?: string;
   confirmation?: string;
   travelers: string[];
   families: FamilyId[];
