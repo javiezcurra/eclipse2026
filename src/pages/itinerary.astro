@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import TimelineItem from '../components/TimelineItem.astro';
 import { sortedItinerary, itineraryDates } from '../data/itinerary';
 import { families, familyColorClasses } from '../data/families';
+import { flightById } from '../data/flights';
 
 const events = sortedItinerary();
 const dates = itineraryDates();
@@ -70,7 +71,9 @@ for (const e of events) {
           <span class="text-xs text-fg-subtle">{d}</span>
         </header>
         <div class="space-y-0">
-          {eventsByDate.get(d)?.map((e) => <TimelineItem event={e} />)}
+          {eventsByDate.get(d)?.map((e) => (
+            <TimelineItem event={e} flight={e.type === 'flight' && e.refId ? flightById(e.refId) : undefined} />
+          ))}
         </div>
       </section>
     ))}
@@ -113,6 +116,26 @@ for (const e of events) {
       chip.classList.add('filter-chip-active', 'ring-2');
       container?.setAttribute('data-active', family);
       applyFilter(family);
+    });
+  }
+
+  // Wire up flight cards to open their associated <dialog>.
+  for (const trigger of document.querySelectorAll<HTMLButtonElement>('[data-modal-target]')) {
+    trigger.addEventListener('click', () => {
+      const id = trigger.dataset.modalTarget;
+      if (!id) return;
+      const dialog = document.getElementById(id) as HTMLDialogElement | null;
+      dialog?.showModal();
+    });
+  }
+
+  // Click outside the modal content closes it.
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog.flight-modal')) {
+    dialog.addEventListener('click', (e) => {
+      const rect = dialog.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right
+                  && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (!inside) dialog.close();
     });
   }
 </script>
