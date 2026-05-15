@@ -3,15 +3,15 @@ import type { ItineraryEvent } from './types';
 // `families: []` means everyone; otherwise list the family ids that participate.
 // `refId` on flight/lodging events points to a Flight or Lodging entry for full details.
 export const itinerary: ItineraryEvent[] = [
-  // ─── Dev-Kev · Atlanta → Barcelona ── PLACEHOLDER ───────────────────────
+  // ─── Dev-Kev · Greenville → Barcelona ── PLACEHOLDER ────────────────────
   {
     id: 'evt-dev-kev-out',
     date: '2026-07-30',
     endDate: '2026-07-31',
     startTime: 'TBD',
     type: 'flight',
-    title: 'Dev-Kev: Atlanta → Barcelona',
-    location: 'ATL → BCN · placeholder',
+    title: 'Dev-Kev: Greenville → Barcelona',
+    location: 'GSP → BCN · placeholder',
     families: ['dev-kev'],
     status: 'needs-action',
     refId: 'dev-kev-out',
@@ -359,14 +359,14 @@ export const itinerary: ItineraryEvent[] = [
     refId: 'vani-ret',
   },
 
-  // ─── Dev-Kev · Madrid → Atlanta ── PLACEHOLDER ──────────────────────────
+  // ─── Dev-Kev · Madrid → Greenville ── PLACEHOLDER ───────────────────────
   {
     id: 'evt-dev-kev-ret',
     date: '2026-08-15',
     startTime: 'TBD',
     type: 'flight',
-    title: 'Dev-Kev: Madrid → Atlanta',
-    location: 'MAD → ATL · placeholder',
+    title: 'Dev-Kev: Madrid → Greenville',
+    location: 'MAD → GSP · placeholder',
     families: ['dev-kev'],
     status: 'needs-action',
     refId: 'dev-kev-ret',
