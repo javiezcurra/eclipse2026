@@ -91,35 +91,9 @@ for (const e of events) {
 </Base>
 
 <script>
-  // ── Auto-scroll to today's section on load ──────────────────────────
-  // Before the trip starts (or after it ends), stay at the top.
-  // If the URL already has a hash, respect that and don't override.
-  (function autoscrollToToday() {
-    if (window.location.hash) return;
+  // ── Setup ───────────────────────────────────────────────────────────
+  const FILTER_KEY = 'itinerary-family-filter';
 
-    const today = new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Europe/Madrid',
-      year: 'numeric', month: '2-digit', day: '2-digit',
-    }).format(new Date());
-
-    const sections = Array.from(document.querySelectorAll<HTMLElement>('.day-section'));
-    const dates = sections
-      .map((s) => s.dataset.date)
-      .filter((d): d is string => Boolean(d))
-      .sort();
-    if (dates.length === 0) return;
-
-    if (today < dates[0]) return;                 // before trip → stay at top
-    if (today > dates[dates.length - 1]) return;  // after trip  → stay at top
-
-    const target = dates.find((d) => d >= today);
-    if (!target) return;
-
-    const el = document.getElementById(`day-${target}`);
-    el?.scrollIntoView({ behavior: 'instant', block: 'start' });
-  })();
-
-  // ── Family filter chips ────────────────────────────────────────────
   const container = document.getElementById('family-filter');
   const chips = container ? Array.from(container.querySelectorAll<HTMLButtonElement>('.filter-chip')) : [];
   const items = Array.from(document.querySelectorAll<HTMLElement>('.timeline-item'));
@@ -142,15 +116,65 @@ for (const e of events) {
     empty?.classList.toggle('hidden', visibleCount > 0);
   }
 
+  function activateChip(family: string) {
+    for (const c of chips) c.classList.remove('filter-chip-active', 'ring-2');
+    const match = chips.find((c) => c.dataset.family === family)
+              ?? chips.find((c) => c.dataset.family === 'all');
+    match?.classList.add('filter-chip-active', 'ring-2');
+    container?.setAttribute('data-active', family);
+    applyFilter(family);
+  }
+
+  // ── Restore saved filter (runs synchronously before auto-scroll so the
+  //    auto-scroll target check sees the correct hidden/visible state). ─
+  try {
+    const saved = localStorage.getItem(FILTER_KEY);
+    if (saved && saved !== 'all' && chips.some((c) => c.dataset.family === saved)) {
+      activateChip(saved);
+    }
+  } catch (_) {}
+
+  // ── Auto-scroll to today's first visible section on load ────────────
+  // Before the trip starts (or after it ends), stay at the top.
+  // If the URL already has a hash, respect that and don't override.
+  // Skips over day sections hidden by the active family filter.
+  (function autoscrollToToday() {
+    if (window.location.hash) return;
+
+    const today = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Madrid',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(new Date());
+
+    const dates = daySections
+      .map((s) => s.dataset.date)
+      .filter((d): d is string => Boolean(d))
+      .sort();
+    if (dates.length === 0) return;
+
+    if (today < dates[0]) return;                 // before trip → stay at top
+    if (today > dates[dates.length - 1]) return;  // after trip  → stay at top
+
+    const target = dates.find((d) => {
+      if (d < today) return false;
+      const el = document.getElementById(`day-${d}`);
+      return Boolean(el) && !el!.classList.contains('hidden');
+    });
+    if (!target) return;
+
+    const el = document.getElementById(`day-${target}`);
+    el?.scrollIntoView({ behavior: 'instant', block: 'start' });
+  })();
+
+  // ── Family filter chip clicks ──────────────────────────────────────
   for (const chip of chips) {
     chip.addEventListener('click', () => {
       const family = chip.dataset.family || 'all';
-      for (const c of chips) {
-        c.classList.remove('filter-chip-active', 'ring-2');
-      }
-      chip.classList.add('filter-chip-active', 'ring-2');
-      container?.setAttribute('data-active', family);
-      applyFilter(family);
+      activateChip(family);
+      try {
+        if (family === 'all') localStorage.removeItem(FILTER_KEY);
+        else localStorage.setItem(FILTER_KEY, family);
+      } catch (_) {}
     });
   }
 
