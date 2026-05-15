@@ -54,21 +54,22 @@ export const eclipse = {
         'Demand for charters around eclipse day will be intense — book well in advance',
         'Weather-dependent (sea state + visibility)',
       ],
-      mapQuery: "Port d'Alcúdia, Mallorca",
+      mapQuery: null,
     },
     {
       id: 'puig-santa-magdalena',
       icon: '⛰️',
       name: 'Puig de Santa Magdalena',
       pros: [
-        'Walking distance from the Airbnb in Inca',
+        '~15 minute drive from the Airbnb in Inca',
         '~287 m elevation gives an unobstructed western horizon',
+        'Plan: arrive plenty early, spend the whole afternoon up there — picnic, hang out, ease into the eclipse',
         'Historic chapel at the summit — a memorable backdrop',
       ],
       cons: [
         'A known viewpoint — likely to draw a crowd',
-        'Arrive well before C1 to find a good spot',
-        'Hiking trail; bring water and decent shoes',
+        'Need to arrive well before C1 to claim a good spot',
+        'Bring water, layers, and decent shoes',
       ],
       mapQuery: 'Puig de Santa Magdalena, Inca, Mallorca',
     },
@@ -93,4 +94,10 @@ export const eclipse = {
     'Never look at the partial sun through a camera, binoculars, or telescope without a proper solar filter — even with eclipse glasses on.',
     'During totality (and only during totality), it is safe to look at the sun with the naked eye.',
   ],
+
+  /** External reference — official Palma tourism info on the eclipse. */
+  learnMore: {
+    label: 'Solar Eclipse in Palma — Visit Palma',
+    url: 'https://visitpalma.com/en/solar-eclipse-palma/',
+  },
 };
