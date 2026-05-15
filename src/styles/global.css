@@ -61,6 +61,26 @@ html, body, nav, footer, main, section, article, aside, header, div {
   transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
 }
 
+/* Shared modal styling for native <dialog> elements (flight, lodging, etc.). */
+dialog.modal {
+  margin: auto;
+  color-scheme: inherit;
+}
+dialog.modal[open] {
+  animation: modal-in 180ms ease-out;
+}
+dialog.modal[open]::backdrop {
+  animation: backdrop-in 180ms ease-out;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Print: make the itinerary printable as a fallback when offline */
 @media print {
   nav, footer, .no-print { display: none !important; }

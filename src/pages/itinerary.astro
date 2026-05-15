@@ -4,6 +4,7 @@ import TimelineItem from '../components/TimelineItem.astro';
 import { sortedItinerary, itineraryDates } from '../data/itinerary';
 import { families, familyColorClasses } from '../data/families';
 import { flightById } from '../data/flights';
+import { lodgingById } from '../data/lodging';
 
 const events = sortedItinerary();
 const dates = itineraryDates();
@@ -72,7 +73,11 @@ for (const e of events) {
         </header>
         <div class="space-y-0">
           {eventsByDate.get(d)?.map((e) => (
-            <TimelineItem event={e} flight={e.type === 'flight' && e.refId ? flightById(e.refId) : undefined} />
+            <TimelineItem
+              event={e}
+              flight={e.type === 'flight' && e.refId ? flightById(e.refId) : undefined}
+              lodging={(e.type === 'lodging-checkin' || e.type === 'lodging-checkout') && e.refId ? lodgingById(e.refId) : undefined}
+            />
           ))}
         </div>
       </section>
@@ -130,7 +135,7 @@ for (const e of events) {
   }
 
   // Click outside the modal content closes it.
-  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog.flight-modal')) {
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog.modal')) {
     dialog.addEventListener('click', (e) => {
       const rect = dialog.getBoundingClientRect();
       const inside = e.clientX >= rect.left && e.clientX <= rect.right
