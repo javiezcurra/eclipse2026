@@ -10,14 +10,6 @@ export const prepItems: PrepItem[] = [
     deadline: '6 months before',
   },
   {
-    id: 'eclipse-glasses',
-    title: 'Order ISO 12312-2 eclipse glasses',
-    description: 'One pair per person, plus a few spares. Order from a reputable seller (AAS-listed).',
-    category: 'packing',
-    appliesTo: [],
-    deadline: '2 months before',
-  },
-  {
     id: 'travel-insurance',
     title: 'Purchase travel insurance',
     description: 'Look for medical + trip cancellation coverage. Save the policy number and 24h assistance phone.',
