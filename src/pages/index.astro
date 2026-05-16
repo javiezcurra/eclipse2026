@@ -5,7 +5,6 @@ import { sortedItinerary, itineraryDates } from '../data/itinerary';
 import { families, familyColorClasses } from '../data/families';
 import { flightById } from '../data/flights';
 import { lodgingById } from '../data/lodging';
-import { trip } from '../data/trip';
 
 const events = sortedItinerary();
 const dates = itineraryDates();
@@ -28,7 +27,6 @@ for (const e of events) {
 <Base>
   <header class="mb-6">
     <h1 class="text-2xl font-bold tracking-tight text-fg-strong sm:text-3xl">Itinerary</h1>
-    <p class="mt-1 text-sm text-fg-muted">{trip.tagline} · Filter by family, or jump to a specific day.</p>
   </header>
 
   <!-- Family filters -->
