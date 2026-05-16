@@ -40,6 +40,7 @@ export const eclipse = {
         'Arrive several hours early to claim space',
       ],
       mapQuery: null,
+      coords: null,
     },
     {
       id: 'boat',
@@ -56,6 +57,7 @@ export const eclipse = {
         'Weather-dependent (sea state + visibility)',
       ],
       mapQuery: null,
+      coords: null,
     },
     {
       id: 'puig-santa-magdalena',
@@ -73,6 +75,7 @@ export const eclipse = {
         'Bring water, layers, and decent shoes',
       ],
       mapQuery: 'Puig de Santa Magdalena, Inca, Mallorca',
+      coords: [39.6953, 2.9028],
     },
   ],
 

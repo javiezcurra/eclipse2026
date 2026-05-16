@@ -82,6 +82,8 @@ export interface Lodging {
   host?: string;
   address?: string;
   mapQuery?: string;
+  /** [latitude, longitude] for the map page. Skip the pin if undefined. */
+  coords?: [number, number];
   phone?: string;
   website?: string;
   confirmation?: string;
