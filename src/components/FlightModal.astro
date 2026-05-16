@@ -97,12 +97,7 @@ const titleId = `${modalId}-title`;
 
       <div>
         <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-fg-subtle">Travelers ({flight.travelers.length})</p>
-        <ul class="grid gap-1 text-sm text-fg sm:grid-cols-2">
-          {flight.travelers.map((t) => <li>· {t}</li>)}
-        </ul>
-        <div class="mt-3">
-          <FamilyChips ids={flight.families} size="md" />
-        </div>
+        <FamilyChips ids={flight.families} size="md" />
       </div>
 
       {flight.notes && (
